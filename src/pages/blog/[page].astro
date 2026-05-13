@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { calculateReadingTime, sortedPosts } from '@/utils/blog';
+
+export async function getStaticPaths() {
+  const posts = sortedPosts(await getCollection('blog'));
+  const pageSize = 6;
+  const pages = Math.ceil(posts.length / pageSize);
+
+  return Array.from({ length: pages - 1 }, (_, i) => {
+    const page = i + 2;
+    const start = (page - 1) * pageSize;
+    const paginatedPosts = posts.slice(start, start + pageSize);
+    return {
+      params: { page: String(page) },
+      props: { page, posts: paginatedPosts, totalPages: pages }
+    };
+  });
+}
+
+const { page, posts, totalPages: pages } = Astro.props;
+---
+
+<BaseLayout
+  title={`Blog Page ${page} | jcesar.dev.br`}
+  description="Paginated blog posts"
+  canonical={`https://jcesar.dev.br/blog/${page}/`}
+>
+  <section class="mb-8 flex items-center justify-between">
+    <h1 class="text-3xl font-bold tracking-tight">Blog — Page {page}</h1>
+    <a href="/blog" class="text-sm text-emerald-600 hover:text-emerald-500">Back to first page</a>
+  </section>
+
+  <section class="grid gap-6 md:grid-cols-2">
+    {posts.map((post) => <PostCard post={post} readingTime={calculateReadingTime(post.body)} />)}
+  </section>
+
+  <nav class="mt-10 flex flex-wrap gap-3" aria-label="Pagination">
+    {page > 2 && <a class="rounded-lg border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700" href={`/blog/${page - 1}/`}>Previous</a>}
+    {page === 2 && <a class="rounded-lg border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700" href="/blog/">Previous</a>}
+    {page < pages && <a class="rounded-lg border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700" href={`/blog/${page + 1}/`}>Next</a>}
+    <span class="self-center text-sm text-zinc-500 dark:text-zinc-400">Page {page} of {pages}</span>
+  </nav>
+</BaseLayout>

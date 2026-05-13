@@ -1,0 +1,20 @@
+---
+title: "High-Performance PHP in 2026"
+description: "Practical optimization checklist for PHP services running in production."
+pubDate: 2026-01-21
+tags:
+  - PHP
+  - Performance
+  - Backend
+featured: false
+---
+
+Performance tuning should be data-driven. Start with profiler traces and production metrics.
+
+```bash
+php artisan optimize
+php artisan route:cache
+php artisan config:cache
+```
+
+Use queues, caching layers, and database indexing to remove bottlenecks before scaling infrastructure.

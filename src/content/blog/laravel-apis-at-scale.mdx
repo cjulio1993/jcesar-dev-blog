@@ -1,0 +1,26 @@
+---
+title: "Designing Laravel APIs at Scale"
+description: "Patterns for sustainable API growth with Laravel, versioning, and observability."
+pubDate: 2026-03-14
+tags:
+  - Laravel
+  - PHP
+  - APIs
+featured: true
+---
+
+Modern API teams need speed without sacrificing reliability. In Laravel, that starts with **clear contracts** and **strict boundaries**.
+
+## Core guidelines
+
+1. Keep controllers thin and orchestration-focused.
+2. Push domain logic into services and actions.
+3. Version APIs early to avoid breaking contracts.
+
+```php
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index']);
+});
+```
+
+Measure latency, error budgets, and throughput to keep your API healthy as traffic grows.

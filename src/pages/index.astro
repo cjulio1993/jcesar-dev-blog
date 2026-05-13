@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { calculateReadingTime, sortedPosts } from '@/utils/blog';
+
+const posts = sortedPosts(await getCollection('blog'));
+const featured = posts.filter((post) => post.data.featured).slice(0, 3);
+const latest = posts.slice(0, 3);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'jcesar.dev.br',
+  url: 'https://jcesar.dev.br',
+  description: 'Developer blog about PHP, Laravel, architecture, APIs and modern backend engineering.'
+};
+---
+
+<BaseLayout
+  title="jcesar.dev.br | Modern Backend Engineering"
+  description="Developer blog focused on PHP, Laravel, software architecture, APIs and modern web development."
+  canonical="https://jcesar.dev.br/"
+  structuredData={structuredData}
+>
+  <section class="grid items-center gap-10 py-10 md:grid-cols-2">
+    <div class="space-y-6">
+      <p class="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">Backend Engineering & Laravel Insights</p>
+      <h1 class="text-4xl font-bold tracking-tight md:text-6xl">Building robust APIs and clean architecture for modern products.</h1>
+      <p class="text-lg text-zinc-600 dark:text-zinc-300">Welcome to jcesar.dev.br — practical lessons on PHP, Laravel, distributed systems, software architecture, and modern web performance.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/blog" class="rounded-xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-emerald-500 dark:text-zinc-950 dark:hover:bg-emerald-400">Read the blog</a>
+        <a href="/projects" class="rounded-xl border border-zinc-300 px-5 py-3 text-sm font-medium transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">View projects</a>
+      </div>
+    </div>
+    <div class="card bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-950">
+      <h2 class="text-xl font-semibold">Developer Portfolio</h2>
+      <ul class="mt-4 space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
+        <li>• 8+ years building backend platforms in PHP/Laravel</li>
+        <li>• API design with OpenAPI-first workflow</li>
+        <li>• Architecture patterns for scalability and reliability</li>
+        <li>• DevOps & cloud-ready static and serverless deployments</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <div class="mb-6 flex items-end justify-between">
+      <h2 class="text-2xl font-semibold">Featured posts</h2>
+      <a href="/blog" class="text-sm text-emerald-600 hover:text-emerald-500">See all</a>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      {(featured.length ? featured : latest).map((post) => (
+        <PostCard post={post} readingTime={calculateReadingTime(post.body)} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>
