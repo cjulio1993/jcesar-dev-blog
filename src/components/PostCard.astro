@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { postUrl } from '@/utils/blog';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  readingTime?: number;
+}
+
+const { post, readingTime } = Astro.props;
+---
+
+<article class="card animate-fade-in-up">
+  <p class="text-xs uppercase tracking-wide text-emerald-600 dark:text-emerald-400">{post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'medium' })}</p>
+  <h3 class="mt-2 text-xl font-semibold">
+    <a href={postUrl(post)} class="hover:text-emerald-600 dark:hover:text-emerald-400">{post.data.title}</a>
+  </h3>
+  <p class="mt-3 text-zinc-600 dark:text-zinc-300">{post.data.description}</p>
+  <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+    {post.data.tags.map((tag) => <a class="rounded-full border border-zinc-300 px-2 py-1 dark:border-zinc-700" href={`/blog/tags/${tag.toLowerCase()}/`}>#{tag}</a>)}
+    {readingTime && <span class="ml-auto">{readingTime} min read</span>}
+  </div>
+</article>

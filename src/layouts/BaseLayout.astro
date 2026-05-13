@@ -1,0 +1,41 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import SEO from '@/components/SEO.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  type?: 'website' | 'article';
+  image?: string;
+  structuredData?: Record<string, unknown>;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO {...(Astro.props as Props)} />
+    <script is:inline>
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main-content" class="container-shell py-10">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

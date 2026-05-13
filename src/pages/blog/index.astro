@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { calculateReadingTime, sortedPosts, uniqueTags } from '@/utils/blog';
+
+const allPosts = sortedPosts(await getCollection('blog'));
+const tags = uniqueTags(allPosts);
+const pageSize = 6;
+const posts = allPosts.slice(0, pageSize);
+const totalPages = Math.ceil(allPosts.length / pageSize);
+---
+
+<BaseLayout
+  title="Blog | jcesar.dev.br"
+  description="Articles about PHP, Laravel, APIs, architecture and modern web development."
+  canonical="https://jcesar.dev.br/blog/"
+>
+  <section class="space-y-6">
+    <h1 class="text-4xl font-bold tracking-tight">Blog</h1>
+    <p class="max-w-2xl text-zinc-600 dark:text-zinc-300">Deep dives and practical guides on backend engineering, software architecture and modern web development.</p>
+    <label class="block">
+      <span class="mb-2 block text-sm font-medium">Search posts</span>
+      <input id="search-input" class="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 outline-none ring-emerald-500 transition focus:ring dark:border-zinc-700 dark:bg-zinc-900" placeholder="Search by title, description or tag..." type="search" />
+    </label>
+    <div class="flex flex-wrap gap-2 text-xs">
+      {tags.map((tag) => (
+        <a class="rounded-full border border-zinc-300 px-3 py-1 transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800" href={`/blog/tags/${tag.toLowerCase()}/`}>#{tag}</a>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-10 grid gap-6 md:grid-cols-2" id="post-grid">
+    {posts.map((post) => (
+      <div data-post-card data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')}`.toLowerCase()}>
+        <PostCard post={post} readingTime={calculateReadingTime(post.body)} />
+      </div>
+    ))}
+  </section>
+
+  {totalPages > 1 && (
+    <nav class="mt-10 flex items-center gap-3" aria-label="Pagination">
+      <span class="text-sm text-zinc-500 dark:text-zinc-400">Page 1 of {totalPages}</span>
+      <a class="rounded-lg border border-zinc-300 px-4 py-2 text-sm hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800" href="/blog/2/">Next page</a>
+    </nav>
+  )}
+
+  <script>
+    const searchInput = document.querySelector('#search-input');
+    const cards = [...document.querySelectorAll('[data-post-card]')];
+
+    searchInput?.addEventListener('input', (event) => {
+      const value = event.target instanceof HTMLInputElement ? event.target.value.toLowerCase().trim() : '';
+      cards.forEach((card) => {
+        const searchable = card.getAttribute('data-search') ?? '';
+        card.classList.toggle('hidden', Boolean(value) && !searchable.includes(value));
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,60 @@
+---
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' }
+];
+---
+
+<header class="sticky top-0 z-40 border-b border-zinc-200/60 bg-white/85 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80">
+  <div class="container-shell flex h-16 items-center justify-between">
+    <a href="/" class="font-semibold tracking-tight">jcesar<span class="text-emerald-500">.dev.br</span></a>
+    <nav aria-label="Main navigation" class="hidden items-center gap-6 text-sm md:flex">
+      {navItems.map((item) => (
+        <a class="text-zinc-600 transition hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white" href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+    <div class="flex items-center gap-2">
+      <button
+        id="theme-toggle"
+        class="rounded-lg border border-zinc-200 p-2 text-sm transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+        aria-label="Toggle dark mode"
+      >
+        <span aria-hidden="true">🌓</span>
+      </button>
+      <button
+        type="button"
+        class="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs md:hidden dark:border-zinc-700"
+        aria-expanded="false"
+        data-mobile-toggle
+      >
+        Menu
+      </button>
+    </div>
+  </div>
+  <nav class="container-shell hidden pb-4 md:hidden" data-mobile-nav aria-label="Mobile navigation">
+    <ul class="space-y-2 text-sm">
+      {navItems.map((item) => (
+        <li><a class="block rounded-md px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800" href={item.href}>{item.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const btn = document.querySelector('#theme-toggle');
+  const mobileBtn = document.querySelector('[data-mobile-toggle]');
+  const mobileNav = document.querySelector('[data-mobile-nav]');
+
+  btn?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  mobileBtn?.addEventListener('click', () => {
+    const isHidden = mobileNav?.classList.toggle('hidden');
+    mobileBtn.setAttribute('aria-expanded', String(!isHidden));
+  });
+</script>

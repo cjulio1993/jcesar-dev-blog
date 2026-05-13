@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { postUrl, relatedPosts } from '@/utils/blog';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  allPosts: CollectionEntry<'blog'>[];
+  readingTime: number;
+}
+
+const { post, allPosts, readingTime } = Astro.props;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate,
+  dateModified: post.data.updatedDate ?? post.data.pubDate,
+  author: {
+    '@type': 'Person',
+    name: 'Julio Cesar'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'jcesar.dev.br'
+  },
+  mainEntityOfPage: `https://jcesar.dev.br${postUrl(post)}`
+};
+
+const related = relatedPosts(post, allPosts);
+---
+
+<BaseLayout
+  title={`${post.data.title} | jcesar.dev.br`}
+  description={post.data.description}
+  canonical={`https://jcesar.dev.br${postUrl(post)}`}
+  type="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  modifiedTime={(post.data.updatedDate ?? post.data.pubDate).toISOString()}
+  tags={post.data.tags}
+  structuredData={structuredData}
+>
+  <article class="mx-auto max-w-3xl">
+    <header class="mb-8 border-b border-zinc-200 pb-8 dark:border-zinc-800">
+      <p class="text-sm text-zinc-500 dark:text-zinc-400">{post.data.pubDate.toLocaleDateString('en-US', { dateStyle: 'long' })} · {readingTime} min read</p>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight md:text-5xl">{post.data.title}</h1>
+      <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-300">{post.data.description}</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {post.data.tags.map((tag) => <a href={`/blog/tags/${tag.toLowerCase()}/`} class="rounded-full border border-zinc-300 px-3 py-1 text-xs dark:border-zinc-700">#{tag}</a>)}
+      </div>
+    </header>
+    <div class="prose prose-zinc max-w-none dark:prose-invert">
+      <slot />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="mt-16">
+      <h2 class="mb-6 text-2xl font-semibold">Related posts</h2>
+      <div class="grid gap-6 md:grid-cols-2">
+        {related.map((relatedPost) => <PostCard post={relatedPost} />)}
+      </div>
+    </section>
+  )}
+</BaseLayout>
