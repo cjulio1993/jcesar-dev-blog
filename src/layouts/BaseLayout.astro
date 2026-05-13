@@ -15,23 +15,33 @@ interface Props {
   modifiedTime?: string;
   tags?: string[];
 }
+
+const isPtBr = Astro.url.pathname.startsWith('/pt-br');
+const htmlLang = isPtBr ? 'pt-BR' : 'en';
+const skipToContent = isPtBr ? 'Pular para o conteudo' : 'Skip to content';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#121410" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
     <SEO {...(Astro.props as Props)} />
     <script is:inline>
       const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (saved === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
       }
     </script>
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to content</a>
+    <a href="#main-content" class="skip-link">{skipToContent}</a>
     <Header />
     <main id="main-content" class="container-shell py-10">
       <slot />

@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { calculateReadingTime, sortedPosts } from '@/utils/blog';
+
+const posts = sortedPosts(await getCollection('blog'));
+const featured = posts.filter((post) => post.data.featured).slice(0, 3);
+const latest = posts.slice(0, 3);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'jcesar.dev.br',
+      url: 'https://jcesar.dev.br/pt-br/',
+      description: 'Blog de engenharia de software sobre PHP, Laravel, arquitetura, APIs e backend moderno.'
+    },
+    {
+      '@type': 'Person',
+      name: 'Julio Cesar',
+      url: 'https://jcesar.dev.br/pt-br/about/',
+      jobTitle: 'Engenheiro de Software'
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title="jcesar.dev.br | Engenharia Backend Moderna"
+  description="Blog focado em PHP, Laravel, arquitetura de software, APIs e desenvolvimento web moderno."
+  canonical="https://jcesar.dev.br/pt-br/"
+  structuredData={structuredData}
+>
+  <section class="relative grid items-center gap-10 py-10 md:grid-cols-2">
+    <div class="pointer-events-none absolute -right-10 -top-8 hidden h-40 w-40 rounded-full bg-brand-200/40 blur-3xl dark:block" aria-hidden="true"></div>
+    <div class="space-y-6">
+      <p class="inline-flex animate-glow rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 dark:border-brand-900 dark:bg-brand-900/40 dark:text-brand-300">Engenharia Backend, APIs e Arquitetura de Software</p>
+      <h1 class="display-title text-4xl font-extrabold tracking-tight md:text-6xl">Construindo plataformas Laravel de alta performance com arquitetura limpa.</h1>
+      <p class="text-lg text-zinc-600 dark:text-zinc-300">Conteúdo prático de sistemas backend em produção: APIs escaláveis, decisões de arquitetura, observabilidade e performance web moderna.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/pt-br/blog/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">Ler artigos</a>
+        <a href="/pt-br/projects/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-medium transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Ver projetos</a>
+      </div>
+    </div>
+    <div class="card bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-950">
+      <h2 class="display-title text-xl font-semibold">Portfólio Técnico</h2>
+      <ul class="mt-4 space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
+        <li>• 4+ anos criando plataformas backend com PHP/Laravel</li>
+        <li>• APIs com OpenAPI-first e testes de contrato</li>
+        <li>• Padrões de arquitetura para escalabilidade e confiabilidade</li>
+        <li>• Performance tuning e deploy cloud-ready</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mt-10">
+    <div class="mb-6 flex items-end justify-between">
+      <h2 class="text-2xl font-semibold">Posts em destaque</h2>
+      <a href="/pt-br/blog/" class="text-sm text-emerald-600 hover:text-emerald-500">Ver todos</a>
+    </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      {(featured.length ? featured : latest).map((post) => (
+        <PostCard post={post} readingTime={calculateReadingTime(post.body)} locale="pt-BR" />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

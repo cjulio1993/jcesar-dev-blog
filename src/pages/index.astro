@@ -10,10 +10,26 @@ const latest = posts.slice(0, 3);
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'jcesar.dev.br',
-  url: 'https://jcesar.dev.br',
-  description: 'Developer blog about PHP, Laravel, architecture, APIs and modern backend engineering.'
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      name: 'jcesar.dev.br',
+      url: 'https://jcesar.dev.br',
+      description: 'Developer blog about PHP, Laravel, architecture, APIs and modern backend engineering.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: 'https://jcesar.dev.br/blog/?q={query}',
+        'query-input': 'required name=query'
+      }
+    },
+    {
+      '@type': 'Person',
+      name: 'Julio Cesar',
+      url: 'https://jcesar.dev.br/about/',
+      jobTitle: 'Backend Engineer',
+      knowsAbout: ['PHP', 'Laravel', 'Software Architecture', 'APIs', 'Web Performance']
+    }
+  ]
 };
 ---
 
@@ -23,23 +39,24 @@ const structuredData = {
   canonical="https://jcesar.dev.br/"
   structuredData={structuredData}
 >
-  <section class="grid items-center gap-10 py-10 md:grid-cols-2">
+  <section class="relative grid items-center gap-10 py-10 md:grid-cols-2">
+    <div class="pointer-events-none absolute -right-10 -top-8 hidden h-40 w-40 rounded-full bg-brand-200/40 blur-3xl dark:block" aria-hidden="true"></div>
     <div class="space-y-6">
-      <p class="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300">Backend Engineering & Laravel Insights</p>
-      <h1 class="text-4xl font-bold tracking-tight md:text-6xl">Building robust APIs and clean architecture for modern products.</h1>
-      <p class="text-lg text-zinc-600 dark:text-zinc-300">Welcome to jcesar.dev.br — practical lessons on PHP, Laravel, distributed systems, software architecture, and modern web performance.</p>
+      <p class="inline-flex animate-glow rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700 dark:border-brand-900 dark:bg-brand-900/40 dark:text-brand-300">Backend Engineering, APIs & Software Architecture</p>
+      <h1 class="display-title text-4xl font-extrabold tracking-tight md:text-6xl">Engineering high-performance Laravel platforms with clean architecture.</h1>
+      <p class="text-lg text-zinc-600 dark:text-zinc-300">Hands-on lessons from production backend systems: scalable APIs, architecture trade-offs, observability, and modern web performance.</p>
       <div class="flex flex-wrap gap-3">
-        <a href="/blog" class="rounded-xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-emerald-500 dark:text-zinc-950 dark:hover:bg-emerald-400">Read the blog</a>
-        <a href="/projects" class="rounded-xl border border-zinc-300 px-5 py-3 text-sm font-medium transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">View projects</a>
+        <a href="/blog/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">Read articles</a>
+        <a href="/projects/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-medium transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Explore projects</a>
       </div>
     </div>
     <div class="card bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-950">
-      <h2 class="text-xl font-semibold">Developer Portfolio</h2>
+      <h2 class="display-title text-xl font-semibold">Developer Portfolio</h2>
       <ul class="mt-4 space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
-        <li>• 8+ years building backend platforms in PHP/Laravel</li>
-        <li>• API design with OpenAPI-first workflow</li>
+        <li>• 4+ years building backend platforms in PHP/Laravel</li>
+        <li>• API design with OpenAPI-first and contract testing workflow</li>
         <li>• Architecture patterns for scalability and reliability</li>
-        <li>• DevOps & cloud-ready static and serverless deployments</li>
+        <li>• Performance tuning and cloud-ready deployments</li>
       </ul>
     </div>
   </section>
@@ -47,7 +64,7 @@ const structuredData = {
   <section class="mt-10">
     <div class="mb-6 flex items-end justify-between">
       <h2 class="text-2xl font-semibold">Featured posts</h2>
-      <a href="/blog" class="text-sm text-emerald-600 hover:text-emerald-500">See all</a>
+      <a href="/blog/" class="text-sm text-emerald-600 hover:text-emerald-500">See all</a>
     </div>
     <div class="grid gap-6 md:grid-cols-3">
       {(featured.length ? featured : latest).map((post) => (

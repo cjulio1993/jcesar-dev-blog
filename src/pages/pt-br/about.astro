@@ -1,0 +1,116 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const techStack = [
+  'PHP', 'Laravel', 'Vue.js', 'JavaScript', 'Node.js', 'Python',
+  'Docker', 'MySQL', 'PostgreSQL', 'Redis', 'Git', 'Linux'
+];
+
+const focusAreas = [
+  'Desenvolvimento SaaS',
+  'Ecossistema Laravel',
+  'Arquitetura backend',
+  'Sistemas de automacao',
+  'Ferramentas para desenvolvedores',
+  'Criacao de conteudo tecnico',
+  'Marca pessoal com blog',
+  'Plataformas web escalaveis',
+  'Oportunidades remotas internacionais'
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'AboutPage',
+      name: 'Sobre Julio Cesar',
+      url: 'https://jcesar.dev.br/pt-br/about/'
+    },
+    {
+      '@type': 'Person',
+      name: 'Julio Cesar',
+      url: 'https://jcesar.dev.br/pt-br/about/',
+      jobTitle: 'Engenheiro de Software',
+      sameAs: ['https://github.com/jcesar', 'https://linkedin.com/in/juliocesardev']
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title="Sobre | jcesar.dev.br"
+  description="Perfil profissional de Julio Cesar, engenheiro de software focado em produtos SaaS e sistemas backend escalaveis."
+  canonical="https://jcesar.dev.br/pt-br/about/"
+  structuredData={structuredData}
+>
+  <section class="relative overflow-hidden rounded-3xl border border-zinc-200/70 bg-white/75 p-8 shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/60 md:p-12">
+    <div class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-300/25 blur-3xl" aria-hidden="true"></div>
+    <p class="mb-5 inline-flex rounded-full border border-brand-200 bg-brand-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-brand-700 dark:border-brand-900 dark:bg-brand-900/30 dark:text-brand-300">Sobre mim</p>
+    <h1 class="display-title text-4xl font-extrabold leading-tight md:text-6xl">Julio Cesar</h1>
+    <p class="mt-4 font-mono text-sm uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">Software Engineer • SaaS Builder • Backend Developer</p>
+    <p class="mt-6 max-w-3xl text-lg text-zinc-600 dark:text-zinc-300">Engenheiro de software focado em construir aplicacoes escalaveis, produtos SaaS, APIs, sistemas de automacao e experiencias web modernas com forte atencao a performance, arquitetura e usabilidade.</p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/pt-br/projects/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">Ver projetos</a>
+      <a href="/pt-br/blog/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Ler blog</a>
+      <a href="/pt-br/contact/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Contato</a>
+    </div>
+  </section>
+
+  <section class="mt-16 grid gap-6 lg:grid-cols-5">
+    <article class="card animate-fade-in-up lg:col-span-3">
+      <h2 class="display-title text-2xl font-bold">Perfil de Engenharia</h2>
+      <div class="mt-5 space-y-4 text-zinc-600 dark:text-zinc-300">
+        <p>Atuo principalmente com PHP e Laravel, e tambem desenvolvo aplicacoes com Vue.js, JavaScript, Node.js e Python. Crio plataformas SaaS, ERPs, sistemas de gestao, automacoes, APIs e sistemas de agendamento para operacoes reais.</p>
+        <p>Tenho forte interesse por engenharia backend e arquitetura escalavel. Priorizo codigo limpo, manutenibilidade e performance para que o software continue evoluindo com seguranca conforme o produto cresce.</p>
+        <p>Sou movido por produto e empreendedorismo, estudo arquitetura moderna e produtividade de desenvolvimento, e sigo construindo produtos tecnicos proprios com foco em oportunidades remotas internacionais.</p>
+      </div>
+    </article>
+
+    <aside class="card animate-fade-in-up lg:col-span-2">
+      <h3 class="display-title text-xl font-semibold">Experiencia Tecnica</h3>
+      <ul class="mt-5 space-y-2 text-sm text-zinc-600 dark:text-zinc-300">
+        <li>REST APIs e integracao frontend/backend</li>
+        <li>Sistemas de autenticacao e autorizacao</li>
+        <li>Integracoes de pagamento e cobranca</li>
+        <li>Filas e processamento assincrono</li>
+        <li>Docker e ambientes Linux</li>
+        <li>MySQL, PostgreSQL e Redis</li>
+        <li>Workflows de deploy e releases</li>
+        <li>Fluxos de Git e GitHub</li>
+        <li>Plataformas web orientadas a SEO</li>
+        <li>Sistemas backend escalaveis</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="mt-16">
+    <h2 class="display-title text-3xl font-bold">Foco atual</h2>
+    <div class="mt-6 flex flex-wrap gap-3">
+      {focusAreas.map((focus) => (
+        <span class="rounded-full border border-zinc-300 bg-white/70 px-4 py-2 text-sm text-zinc-700 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300">{focus}</span>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16">
+    <h2 class="display-title text-3xl font-bold">Tech Stack</h2>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {techStack.map((tech) => (
+        <article class="card group p-5">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Tecnologia</p>
+          <h3 class="mt-3 text-lg font-semibold transition group-hover:text-brand-600 dark:group-hover:text-brand-400">{tech}</h3>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16 rounded-3xl border border-zinc-200/70 bg-gradient-to-br from-white/80 to-zinc-100/80 p-8 shadow-lg backdrop-blur-xl dark:border-zinc-800 dark:from-zinc-900/70 dark:to-zinc-900/30 md:p-10">
+    <h2 class="display-title text-3xl font-bold">Vamos construir algo relevante</h2>
+    <p class="mt-4 max-w-3xl text-zinc-600 dark:text-zinc-300">Aberto a projetos freelance, colaboracoes, oportunidades remotas, produtos para startups e parcerias SaaS.</p>
+    <div class="mt-7 flex flex-wrap gap-3">
+      <a href="/pt-br/contact/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">Iniciar conversa</a>
+      <a href="/pt-br/projects/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Ver projetos</a>
+    </div>
+  </section>
+</BaseLayout>

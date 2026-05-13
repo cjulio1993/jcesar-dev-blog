@@ -3,7 +3,18 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+  --bg-0: #f8f8f4;
+  --bg-1: #ffffff;
+  --text-0: #1f231d;
+  --grid: rgba(66, 71, 58, 0.08);
+}
+
+:root.dark {
+  --bg-0: #121410;
+  --bg-1: #171a14;
+  --text-0: #edf0e7;
+  --grid: rgba(182, 204, 143, 0.09);
 }
 
 html {
@@ -11,7 +22,25 @@ html {
 }
 
 body {
-  @apply bg-white text-zinc-900 antialiased transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100;
+  @apply text-zinc-900 antialiased transition-colors duration-300 dark:text-zinc-100;
+  background:
+    radial-gradient(circle at 10% -20%, rgba(111, 147, 63, 0.2), transparent 45%),
+    radial-gradient(circle at 90% 0%, rgba(94, 124, 50, 0.2), transparent 40%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1));
+  color: var(--text-0);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: radial-gradient(circle at 50% 20%, black 20%, transparent 80%);
+  z-index: -1;
 }
 
 .container-shell {
@@ -20,10 +49,33 @@ body {
 
 .card {
   @apply rounded-2xl border border-zinc-200/70 bg-white/90 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/70;
+  backdrop-filter: blur(8px);
 }
 
 .prose pre {
   @apply rounded-xl;
+}
+
+.display-title {
+  @apply font-display tracking-tight;
+}
+
+.ghost-ring {
+  @apply relative overflow-hidden;
+}
+
+.ghost-ring::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 172, 109, 0.36);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.ghost-ring:hover::after {
+  opacity: 1;
 }
 
 .skip-link {

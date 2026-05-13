@@ -1,24 +1,199 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const techStack = [
+  'PHP',
+  'Laravel',
+  'Vue.js',
+  'JavaScript',
+  'Node.js',
+  'Python',
+  'Docker',
+  'MySQL',
+  'PostgreSQL',
+  'Redis',
+  'Git',
+  'Linux'
+];
+
+const focusAreas = [
+  'SaaS development',
+  'Laravel ecosystem',
+  'Backend architecture',
+  'Automation systems',
+  'Developer tooling',
+  'Technical content creation',
+  'Personal branding through blogging',
+  'Scalable web platforms',
+  'Remote software opportunities'
+];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'AboutPage',
+      name: 'About Julio Cesar',
+      url: 'https://jcesar.dev.br/about/'
+    },
+    {
+      '@type': 'Person',
+      name: 'Julio Cesar',
+      url: 'https://jcesar.dev.br/about/',
+      jobTitle: 'Software Engineer',
+      worksFor: {
+        '@type': 'Organization',
+        name: 'Independent SaaS Builder'
+      },
+      sameAs: ['https://github.com/jcesar', 'https://linkedin.com/in/juliocesardev'],
+      knowsAbout: [
+        'PHP',
+        'Laravel',
+        'Backend Engineering',
+        'SaaS Development',
+        'Software Architecture',
+        'API Design'
+      ]
+    }
+  ]
+};
 ---
 
 <BaseLayout
   title="About | jcesar.dev.br"
-  description="About Julio Cesar, backend engineer focused on PHP, Laravel and software architecture."
+  description="Professional profile of Julio Cesar, a software engineer from Brazil focused on SaaS products, backend systems, and scalable architecture."
   canonical="https://jcesar.dev.br/about/"
+  structuredData={structuredData}
 >
-  <article class="prose prose-zinc max-w-3xl dark:prose-invert">
-    <h1>About me</h1>
-    <p>
-      I'm Julio Cesar, a backend engineer passionate about building resilient products with PHP, Laravel, and modern architecture practices.
-      I focus on clear API contracts, observability, and maintainable systems that scale with business growth.
+  <section class="relative overflow-hidden rounded-3xl border border-zinc-200/70 bg-white/75 p-8 shadow-xl backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/60 md:p-12">
+    <div class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-brand-300/25 blur-3xl" aria-hidden="true"></div>
+    <p class="mb-5 inline-flex rounded-full border border-brand-200 bg-brand-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-brand-700 dark:border-brand-900 dark:bg-brand-900/30 dark:text-brand-300">
+      About Me
     </p>
-    <h2>What I write about</h2>
-    <ul>
-      <li>Laravel and PHP ecosystem updates</li>
-      <li>Backend architecture and distributed systems patterns</li>
-      <li>API performance, testing, and security best practices</li>
-      <li>Developer productivity and modern web tooling</li>
-    </ul>
-  </article>
+    <h1 class="display-title text-4xl font-extrabold leading-tight md:text-6xl">
+      Julio Cesar
+    </h1>
+    <p class="mt-4 font-mono text-sm uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+      Software Engineer • SaaS Builder • Backend Developer
+    </p>
+    <p class="mt-6 max-w-3xl text-lg text-zinc-600 dark:text-zinc-300">
+      A software engineer focused on building scalable applications, SaaS products, APIs, automation systems, and modern web experiences with strong attention to performance, architecture, and usability.
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/projects/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">View Projects</a>
+      <a href="/blog/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Read Blog</a>
+      <a href="/contact/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">Contact</a>
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-4 text-sm">
+      <a href="https://github.com/jcesar" target="_blank" rel="noreferrer" class="rounded-lg border border-zinc-300 px-4 py-2 text-zinc-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-brand-500 dark:hover:text-brand-300">GitHub</a>
+      <a href="https://linkedin.com/in/juliocesardev" target="_blank" rel="noreferrer" class="rounded-lg border border-zinc-300 px-4 py-2 text-zinc-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-brand-500 dark:hover:text-brand-300">LinkedIn</a>
+      <a href="mailto:hello@jcesar.dev.br" class="rounded-lg border border-zinc-300 px-4 py-2 text-zinc-700 transition hover:border-brand-400 hover:text-brand-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-brand-500 dark:hover:text-brand-300">Email</a>
+    </div>
+  </section>
+
+  <section class="mt-16 grid gap-6 lg:grid-cols-5">
+    <article class="card animate-fade-in-up lg:col-span-3">
+      <h2 class="display-title text-2xl font-bold">Engineering Profile</h2>
+      <div class="mt-5 space-y-4 text-zinc-600 dark:text-zinc-300">
+        <p>
+          I am a software engineer from Brazil working primarily with PHP and Laravel, while also building products with Vue.js, JavaScript, Node.js, and Python. I design and ship SaaS platforms, ERP and business management systems, automation tools, REST APIs, and scheduling systems that support real operational workflows.
+        </p>
+        <p>
+          My core motivation is backend engineering and scalable architecture. I care deeply about clean code, maintainability, and performance because software should be easy to evolve as products grow. I enjoy turning complex business requirements into practical systems that are stable, testable, and valuable in production.
+        </p>
+        <p>
+          I am highly interested in entrepreneurship and product development, and I continuously study modern software architecture and developer productivity. Alongside client and professional work, I am building personal technical products and open initiatives with a strong focus on remote international opportunities.
+        </p>
+      </div>
+    </article>
+
+    <aside class="card animate-fade-in-up lg:col-span-2">
+      <h3 class="display-title text-xl font-semibold">Technical Experience</h3>
+      <ul class="mt-5 space-y-2 text-sm text-zinc-600 dark:text-zinc-300">
+        <li>REST APIs and frontend/backend integration</li>
+        <li>Authentication and authorization systems</li>
+        <li>Payment gateway and billing integrations</li>
+        <li>Queue processing and asynchronous workflows</li>
+        <li>Dockerized environments and Linux servers</li>
+        <li>MySQL, PostgreSQL, and Redis data layers</li>
+        <li>Deployment pipelines and release workflows</li>
+        <li>Git and GitHub collaboration practices</li>
+        <li>SEO-oriented web platforms</li>
+        <li>Scalable backend systems for SaaS growth</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="mt-16">
+    <div class="mb-6">
+      <h2 class="display-title text-3xl font-bold">Career Philosophy</h2>
+      <p class="mt-3 max-w-3xl text-zinc-600 dark:text-zinc-300">
+        My mindset combines technical excellence and product thinking. I prioritize practical engineering over unnecessary complexity, always aiming for software that is maintainable, efficient, and clearly aligned with user and business outcomes.
+      </p>
+    </div>
+    <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <article class="card">
+        <h3 class="font-semibold">Continuous Learning</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">I keep refining my craft through real-world practice, architecture studies, and modern development workflows.</p>
+      </article>
+      <article class="card">
+        <h3 class="font-semibold">Engineering + Business Balance</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">I build with business impact in mind, connecting architecture decisions to product outcomes and growth.</p>
+      </article>
+      <article class="card">
+        <h3 class="font-semibold">Maintainable Systems</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Readable codebases, predictable patterns, and sustainable foundations are central to every project I ship.</p>
+      </article>
+      <article class="card">
+        <h3 class="font-semibold">User-Centered Technology</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">I improve user experience through speed, reliability, and thoughtful integration between backend and interface layers.</p>
+      </article>
+      <article class="card">
+        <h3 class="font-semibold">Practical Solutions</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">I choose efficient and proven approaches first, then scale complexity only when the product actually requires it.</p>
+      </article>
+      <article class="card">
+        <h3 class="font-semibold">Product Creation Passion</h3>
+        <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-300">Building meaningful software products is what drives me, from idea validation to deployment and iteration.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="mt-16">
+    <h2 class="display-title text-3xl font-bold">Current Focus</h2>
+    <p class="mt-3 max-w-3xl text-zinc-600 dark:text-zinc-300">
+      I am currently focused on building modern SaaS products, scaling backend systems, and creating technical content that strengthens both engineering practice and personal brand positioning.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      {focusAreas.map((focus) => (
+        <span class="rounded-full border border-zinc-300 bg-white/70 px-4 py-2 text-sm text-zinc-700 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/70 dark:text-zinc-300">{focus}</span>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16">
+    <h2 class="display-title text-3xl font-bold">Tech Stack</h2>
+    <p class="mt-3 max-w-2xl text-zinc-600 dark:text-zinc-300">A practical and production-oriented stack for SaaS development, platform engineering, and reliable product delivery.</p>
+    <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {techStack.map((tech) => (
+        <article class="card group p-5">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">Technology</p>
+          <h3 class="mt-3 text-lg font-semibold transition group-hover:text-brand-600 dark:group-hover:text-brand-400">{tech}</h3>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="mt-16 rounded-3xl border border-zinc-200/70 bg-gradient-to-br from-white/80 to-zinc-100/80 p-8 shadow-lg backdrop-blur-xl dark:border-zinc-800 dark:from-zinc-900/70 dark:to-zinc-900/30 md:p-10">
+    <h2 class="display-title text-3xl font-bold">Let’s Build Something Valuable</h2>
+    <p class="mt-4 max-w-3xl text-zinc-600 dark:text-zinc-300">
+      I am open to freelance work, strategic collaborations, remote opportunities, startup product projects, and SaaS partnerships. If you are looking for a modern software engineer focused on execution, architecture, and product impact, let’s connect.
+    </p>
+    <div class="mt-7 flex flex-wrap gap-3">
+      <a href="/contact/" class="ghost-ring rounded-xl bg-zinc-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-zinc-700 dark:bg-brand-500 dark:text-zinc-950 dark:hover:bg-brand-400">Start a Conversation</a>
+      <a href="/projects/" class="ghost-ring rounded-xl border border-zinc-300 px-5 py-3 text-sm font-semibold transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800">See Project Work</a>
+    </div>
+  </section>
 </BaseLayout>
