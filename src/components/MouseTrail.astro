@@ -1,0 +1,97 @@
+<canvas class="mouse-trail" aria-hidden="true"></canvas>
+<style>
+  .mouse-trail { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+  @media (prefers-reduced-motion: reduce), (pointer: coarse) { .mouse-trail { display: none; } }
+</style>
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('.mouse-trail');
+  const context = canvas?.getContext('2d');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(any-pointer: fine)');
+  if (canvas && context) {
+    type Point = { x: number; y: number; time: number };
+    let points: Point[] = [];
+    let frame = 0;
+    let lastTime = 0;
+    let blue = '';
+    let green = '';
+    const lifetime = 650;
+    const updateColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      blue = styles.getPropertyValue('--accent').trim();
+      green = styles.getPropertyValue('--secondary').trim();
+    };
+    const resize = () => {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(window.innerWidth * ratio);
+      canvas.height = Math.round(window.innerHeight * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      points = [];
+    };
+    const clear = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      points = [];
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    };
+    const draw = (now: number) => {
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      points = points.filter((point) => now - point.time < lifetime);
+      context.lineCap = 'round';
+      for (let index = 0; index < points.length; index++) {
+        const point = points[index];
+        const opacity = Math.max(0, 1 - (now - point.time) / lifetime);
+        const color = index % 3 === 0 ? green : blue;
+        context.globalAlpha = opacity * 0.6;
+        context.strokeStyle = color;
+        context.fillStyle = color;
+        context.shadowColor = color;
+        context.shadowBlur = 9 * opacity;
+        const previous = points[index - 1];
+        if (previous && point.time - previous.time < 80 && Math.hypot(point.x - previous.x, point.y - previous.y) < 160) {
+          context.lineWidth = 1.8 * opacity;
+          context.beginPath();
+          context.moveTo(previous.x, previous.y);
+          context.lineTo(point.x, point.y);
+          context.stroke();
+        }
+        if (index % 3 === 0) {
+          context.beginPath();
+          context.arc(point.x, point.y - (1 - opacity) * 8, Math.max(0.2, opacity * 2), 0, Math.PI * 2);
+          context.fill();
+        }
+      }
+      context.globalAlpha = 1;
+      context.shadowBlur = 0;
+      frame = points.length ? requestAnimationFrame(draw) : 0;
+    };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || reducedMotion.matches || !finePointer.matches) return;
+      const now = performance.now();
+      if (now - lastTime < 12) return;
+      lastTime = now;
+      points.push({ x: event.clientX, y: event.clientY, time: now });
+      if (points.length > 70) points.shift();
+      if (!frame) frame = requestAnimationFrame(draw);
+    };
+    updateColors();
+    resize();
+    const themeObserver = new MutationObserver(updateColors);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    window.addEventListener('pointermove', move, { passive: true });
+    window.addEventListener('resize', resize, { passive: true });
+    window.addEventListener('blur', clear);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clear(); });
+    reducedMotion.addEventListener('change', clear);
+    finePointer.addEventListener('change', clear);
+    window.addEventListener('pagehide', () => {
+      clear();
+      themeObserver.disconnect();
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('blur', clear);
+      reducedMotion.removeEventListener('change', clear);
+      finePointer.removeEventListener('change', clear);
+    }, { once: true });
+  }
+</script>

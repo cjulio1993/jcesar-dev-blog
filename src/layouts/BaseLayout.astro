@@ -1,10 +1,12 @@
 ---
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import MouseTrail from '@/components/MouseTrail.astro';
 import SEO from '@/components/SEO.astro';
 import { copy } from '@/data/site';
 import { localeFromPath, localeMeta } from '@/i18n';
 import '@/styles/global.css';
+import '@/styles/futuristic.css';
 
 interface Props {
   title: string;
@@ -27,7 +29,7 @@ const t = copy[locale];
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#080b12" />
+    <meta name="theme-color" content="#0c0c0c" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,8 +37,7 @@ const t = copy[locale];
     <SEO {...(Astro.props as Props)} />
     <script is:inline>
       const savedTheme = localStorage.getItem('theme');
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', savedTheme ? savedTheme === 'dark' : systemDark);
+      document.documentElement.classList.toggle('dark', savedTheme ? savedTheme === 'dark' : true);
     </script>
   </head>
   <body>
@@ -45,6 +46,7 @@ const t = copy[locale];
     <Header />
     <main id="main-content"><slot /></main>
     <Footer />
+    <MouseTrail />
     <script>
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!reducedMotion) {

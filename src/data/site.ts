@@ -8,6 +8,7 @@ export const socialLinks = {
 };
 
 export const technologies = [
+  { name: 'Python', icon: 'python/python-original.svg', group: 'backend' },
   { name: 'PHP', icon: 'php/php-original.svg', group: 'backend' },
   { name: 'Laravel', icon: 'laravel/laravel-original.svg', group: 'backend' },
   { name: 'Symfony', icon: 'symfony/symfony-original.svg', group: 'backend' },
@@ -33,7 +34,7 @@ const sharedProjects = {
     featured: true
   },
   banking: {
-    title: 'Banking Protest API',
+    title: 'Financial Integration API',
     eyebrow: 'Production · Financial integration',
     stack: ['PHP', 'Laravel/Lumen', 'Queues', 'SQL Server'],
     featured: true
@@ -44,8 +45,8 @@ const sharedProjects = {
     stack: ['Laravel', 'Vue 3', 'Sanctum', 'Pest'],
     featured: true
   },
-  cenprot: {
-    title: 'CENPROT APIs',
+  platform: {
+    title: 'Enterprise Platform APIs',
     eyebrow: 'Production · Platform modernization',
     stack: ['REST', 'SOAP', 'OpenAPI', 'Observability'],
     featured: false
@@ -92,14 +93,14 @@ export const copy: Record<Locale, any> = {
     },
     projects: [
       { ...sharedProjects.localcodepilot, description: 'A desktop app that detects local projects, understands their stacks and starts development processes with status and logs in one place.', impact: 'Launched its first public version as an open-source product, with support for PHP, JavaScript, Python and Rust projects.' },
-      { ...sharedProjects.banking, description: 'A resilient national file-delivery workflow for banking integrations, designed with dispatcher/worker processing, retries and a dead-letter queue.', impact: 'Structured logs, correlation IDs and idempotency make failures traceable and safe to recover without duplicate processing.' },
+      { ...sharedProjects.banking, description: 'A resilient file-delivery workflow for banking integrations, designed with dispatcher/worker processing, retries and a dead-letter queue.', impact: 'Structured logs, correlation IDs and idempotency make failures traceable and safe to recover without duplicate processing.' },
       { ...sharedProjects.taskflow, description: 'A project and task management application built as a complete Laravel and Vue SPA, with a polished board experience.', impact: 'Sanctum authentication, authorization policies and 15 automated tests with 47 assertions.' },
-      { ...sharedProjects.cenprot, description: 'REST and SOAP interfaces that modernize access to a national protest platform while preserving compatibility with legacy clients.', impact: 'Incremental modernization with authentication, rate limits, contract documentation and production observability.' }
+      { ...sharedProjects.platform, description: 'REST and SOAP interfaces that modernize access to an enterprise platform while preserving compatibility with legacy clients.', impact: 'Incremental modernization with authentication, rate limits, contract documentation and production observability.' }
     ],
     experience: [
-      { period: '2023 — now', role: 'Software Engineer', company: 'IEPTB-BR · Protest Registry Offices', text: 'Backend services and banking/corporate integrations. API reliability, queues, idempotency, observability, automated tests and gradual modernization of legacy systems.' },
-      { period: '2022 — 2023', role: 'PHP Developer', company: 'HSOL Marketing', text: 'Web applications, APIs, SQL features and integrations delivered from implementation through production.' },
-      { period: '2016 — 2022', role: 'Operations & Team Leadership', company: 'PXC', text: 'Led teams, operations and customer relationships — experience that now shapes pragmatic engineering and product decisions.' }
+      { period: '2023 — now', role: 'Software Engineer', company: 'Backend systems & integrations', text: 'Backend services and banking/corporate integrations. API reliability, queues, idempotency, observability, automated tests and gradual modernization of legacy systems.' },
+      { period: '2022 — 2023', role: 'PHP Developer', company: 'Web applications', text: 'Web applications, APIs, SQL features and integrations delivered from implementation through production.' },
+      { period: '2016 — 2022', role: 'Operations & Team Leadership', company: 'Operations & customer relationships', text: 'Led teams, operations and customer relationships — experience that now shapes pragmatic engineering and product decisions.' }
     ],
     about: {
       title: 'Engineering with context, not just code.',
@@ -162,14 +163,14 @@ export const copy: Record<Locale, any> = {
     },
     projects: [
       { ...sharedProjects.localcodepilot, description: 'Aplicativo desktop que detecta projetos locais, entende suas stacks e inicia processos de desenvolvimento com status e logs em um só lugar.', impact: 'Primeira versão pública lançada como produto open source, com suporte a projetos PHP, JavaScript, Python e Rust.' },
-      { ...sharedProjects.banking, title: 'API bancária de protestos', eyebrow: 'Produção · Integração financeira', description: 'Fluxo nacional e resiliente de entrega de arquivos para integrações bancárias, com processamento dispatcher/worker, retentativas e dead-letter queue.', impact: 'Logs estruturados, correlation IDs e idempotência tornam falhas rastreáveis e permitem recuperação segura, sem processamento duplicado.' },
+      { ...sharedProjects.banking, title: 'API de integração financeira', eyebrow: 'Produção · Integração financeira', description: 'Fluxo resiliente de entrega de arquivos para integrações bancárias, com processamento dispatcher/worker, retentativas e dead-letter queue.', impact: 'Logs estruturados, correlation IDs e idempotência tornam falhas rastreáveis e permitem recuperação segura, sem processamento duplicado.' },
       { ...sharedProjects.taskflow, description: 'Aplicação de gestão de projetos e tarefas construída como SPA completa em Laravel e Vue, com experiência refinada de quadro.', impact: 'Autenticação Sanctum, políticas de autorização e 15 testes automatizados com 47 asserções.' },
-      { ...sharedProjects.cenprot, title: 'APIs CENPROT', eyebrow: 'Produção · Modernização de plataforma', description: 'Interfaces REST e SOAP que modernizam o acesso a uma plataforma nacional de protestos sem abandonar clientes legados.', impact: 'Modernização gradual com autenticação, rate limiting, documentação de contratos e observabilidade em produção.' }
+      { ...sharedProjects.platform, title: 'APIs de integração corporativa', eyebrow: 'Produção · Modernização de plataforma', description: 'Interfaces REST e SOAP que modernizam o acesso a uma plataforma corporativa sem abandonar clientes legados.', impact: 'Modernização gradual com autenticação, rate limiting, documentação de contratos e observabilidade em produção.' }
     ],
     experience: [
-      { period: '2023 — atual', role: 'Engenheiro de Software', company: 'IEPTB-BR · Cartórios de Protesto', text: 'Serviços backend e integrações bancárias/corporativas. Confiabilidade de APIs, filas, idempotência, observabilidade, testes automatizados e modernização gradual de legados.' },
-      { period: '2022 — 2023', role: 'Desenvolvedor PHP', company: 'HSOL Marketing', text: 'Aplicações web, APIs, funcionalidades SQL e integrações entregues da implementação à produção.' },
-      { period: '2016 — 2022', role: 'Operações e liderança de equipes', company: 'PXC', text: 'Liderança de equipes, operações e relacionamento com clientes — experiência que hoje orienta decisões pragmáticas de engenharia e produto.' }
+      { period: '2023 — atual', role: 'Engenheiro de Software', company: 'Sistemas backend e integrações', text: 'Serviços backend e integrações bancárias/corporativas. Confiabilidade de APIs, filas, idempotência, observabilidade, testes automatizados e modernização gradual de legados.' },
+      { period: '2022 — 2023', role: 'Desenvolvedor PHP', company: 'Aplicações web', text: 'Aplicações web, APIs, funcionalidades SQL e integrações entregues da implementação à produção.' },
+      { period: '2016 — 2022', role: 'Operações e liderança de equipes', company: 'Operações e relacionamento com clientes', text: 'Liderança de equipes, operações e relacionamento com clientes — experiência que hoje orienta decisões pragmáticas de engenharia e produto.' }
     ],
     about: {
       title: 'Engenharia com contexto, não apenas código.',
@@ -232,14 +233,14 @@ export const copy: Record<Locale, any> = {
     },
     projects: [
       { ...sharedProjects.localcodepilot, description: 'Aplicación de escritorio que detecta proyectos locales, entiende sus stacks e inicia procesos de desarrollo con estado y logs en un solo lugar.', impact: 'Primera versión pública lanzada como producto open source, compatible con proyectos PHP, JavaScript, Python y Rust.' },
-      { ...sharedProjects.banking, title: 'API bancaria de protestos', eyebrow: 'Producción · Integración financiera', description: 'Flujo nacional y resiliente de entrega de archivos para integraciones bancarias, con procesamiento dispatcher/worker, reintentos y dead-letter queue.', impact: 'Logs estructurados, correlation IDs e idempotencia permiten rastrear y recuperar fallos sin procesamiento duplicado.' },
+      { ...sharedProjects.banking, title: 'API de integración financiera', eyebrow: 'Producción · Integración financiera', description: 'Flujo resiliente de entrega de archivos para integraciones bancarias, con procesamiento dispatcher/worker, reintentos y dead-letter queue.', impact: 'Logs estructurados, correlation IDs e idempotencia permiten rastrear y recuperar fallos sin procesamiento duplicado.' },
       { ...sharedProjects.taskflow, description: 'Aplicación de gestión de proyectos y tareas construida como SPA completa con Laravel y Vue.', impact: 'Autenticación Sanctum, políticas de autorización y 15 pruebas automatizadas con 47 aserciones.' },
-      { ...sharedProjects.cenprot, title: 'APIs CENPROT', eyebrow: 'Producción · Modernización de plataforma', description: 'Interfaces REST y SOAP que modernizan el acceso a una plataforma nacional de protestos sin abandonar clientes heredados.', impact: 'Modernización gradual con autenticación, rate limiting, documentación de contratos y observabilidad.' }
+      { ...sharedProjects.platform, title: 'APIs de integración corporativa', eyebrow: 'Producción · Modernización de plataforma', description: 'Interfaces REST y SOAP que modernizan el acceso a una plataforma corporativa sin abandonar clientes heredados.', impact: 'Modernización gradual con autenticación, rate limiting, documentación de contratos y observabilidad.' }
     ],
     experience: [
-      { period: '2023 — presente', role: 'Ingeniero de Software', company: 'IEPTB-BR · Registros de Protesto', text: 'Servicios backend e integraciones bancarias/corporativas. Confiabilidad de APIs, colas, idempotencia, observabilidad, pruebas automatizadas y modernización gradual.' },
-      { period: '2022 — 2023', role: 'Desarrollador PHP', company: 'HSOL Marketing', text: 'Aplicaciones web, APIs, funcionalidades SQL e integraciones entregadas desde la implementación hasta producción.' },
-      { period: '2016 — 2022', role: 'Operaciones y liderazgo de equipos', company: 'PXC', text: 'Liderazgo de equipos, operaciones y relación con clientes — experiencia que hoy orienta decisiones pragmáticas de ingeniería y producto.' }
+      { period: '2023 — presente', role: 'Ingeniero de Software', company: 'Sistemas backend e integraciones', text: 'Servicios backend e integraciones bancarias/corporativas. Confiabilidad de APIs, colas, idempotencia, observabilidad, pruebas automatizadas y modernización gradual.' },
+      { period: '2022 — 2023', role: 'Desarrollador PHP', company: 'Aplicaciones web', text: 'Aplicaciones web, APIs, funcionalidades SQL e integraciones entregadas desde la implementación hasta producción.' },
+      { period: '2016 — 2022', role: 'Operaciones y liderazgo de equipos', company: 'Operaciones y relación con clientes', text: 'Liderazgo de equipos, operaciones y relación con clientes — experiencia que hoy orienta decisiones pragmáticas de ingeniería y producto.' }
     ],
     about: {
       title: 'Ingeniería con contexto, no solo código.',
