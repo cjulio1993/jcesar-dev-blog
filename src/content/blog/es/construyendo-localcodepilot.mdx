@@ -1,0 +1,30 @@
+---
+title: "De proyecto de aprendizaje al primer release de LocalCodePilot"
+description: "Lo que crear una herramienta de escritorio en Rust me enseñó sobre alcance, procesos y publicar en abierto."
+pubDate: 2026-09-22
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: es
+slug: es/construyendo-localcodepilot
+translationKey: building-localcodepilot
+---
+
+LocalCodePilot comenzó con una pregunta sencilla: ¿por qué iniciar un proyecto local exige recordar comandos diferentes cada vez?
+
+La primera versión útil no necesitaba administrar todos los runtimes ni reemplazar contenedores. Necesitaba detectar un proyecto, entender el comando de desarrollo más probable e iniciarlo con feedback claro.
+
+## Detectar es más que encontrar archivos
+
+Archivos como `Cargo.toml`, `package.json`, `composer.json` y `pyproject.toml` revelan las tecnologías de un repositorio. No siempre revelan qué proceso representa la aplicación principal.
+
+Un proyecto Laravel, por ejemplo, puede exponer Vite y `php artisan serve`. La herramienta necesita contexto: un proceso gestiona assets y hot reload, mientras el otro sirve la aplicación. Tratar todos los scripts como equivalentes crea una interfaz ruidosa.
+
+## Un proceso tiene un ciclo de vida
+
+Ejecutar un comando es fácil. Una herramienta útil también necesita saber si el proceso sigue activo, qué PID le pertenece, dónde está su salida y cómo terminó. Esto transformó el proyecto de un launcher en un ejercicio de supervisión de procesos.
+
+## Publicar crea mejores preguntas
+
+Lanzar la primera versión me obligó a mejorar la documentación, producir binarios reproducibles y decidir qué pertenecía al alcance inicial. El roadmap también se volvió concreto: logs, puertos, detección de runtimes y actualizaciones seguras son problemas reales de usuario.
+
+La mayor lección fue simple: una versión enfocada enseña más que un prototipo ambicioso. LocalCodePilot sigue evolucionando, pero ya es un producto open source real que puede crecer con uso y feedback.

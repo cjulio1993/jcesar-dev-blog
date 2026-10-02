@@ -1,0 +1,30 @@
+---
+title: "From a learning project to LocalCodePilot's first release"
+description: "What building a Rust desktop tool taught me about scope, process management and shipping in public."
+pubDate: 2026-09-22
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: en
+slug: en/building-localcodepilot
+translationKey: building-localcodepilot
+---
+
+LocalCodePilot began with a small question: why should starting a local project require remembering a different set of commands every time?
+
+The first useful version did not need to manage every runtime or replace containers. It needed to detect a project, understand the likely development command and start it with clear feedback.
+
+## Detection is more than finding files
+
+Files such as `Cargo.toml`, `package.json`, `composer.json` and `pyproject.toml` reveal the technologies in a repository. They do not always reveal which process is the main application.
+
+A Laravel project, for example, may expose both Vite and `php artisan serve`. The tool needs context: one process handles assets and hot reload, while another serves the application. Treating every script as equivalent creates a noisy and confusing interface.
+
+## A process needs a lifecycle
+
+Starting a command is easy. A useful developer tool also needs to know whether the process is running, which PID belongs to it, where its output goes and how it ended. This turned the project from a launcher into an exercise in process supervision.
+
+## Shipping creates better questions
+
+Publishing the first release forced me to improve documentation, build reproducible binaries and decide what belonged in the initial scope. It also made the roadmap more concrete: logs, ports, runtime detection and safer updates are real user problems, not just feature ideas.
+
+The biggest lesson was simple: a focused release teaches more than an ambitious prototype. LocalCodePilot is still evolving, but it is now a real open-source product that can grow through use and feedback.

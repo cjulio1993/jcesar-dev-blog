@@ -1,0 +1,35 @@
+---
+title: "Reliable APIs: idempotency, retries and dead-letter queues"
+description: "A practical way to design integrations that recover from failure without duplicating business operations."
+pubDate: 2026-10-02
+tags: [APIs, Architecture, Reliability]
+featured: true
+locale: en
+slug: en/reliable-apis
+translationKey: reliable-apis
+---
+
+An integration is not reliable because it works on the happy path. It is reliable when a timeout, a duplicated request or a temporary dependency failure does not corrupt the business flow.
+
+## Start with the operation, not the endpoint
+
+Before choosing a retry policy, define what the operation means. Can the same request arrive twice? Does it create a new resource, replace a state or advance a workflow? The answer determines where the idempotency boundary belongs.
+
+For commands that must happen once, I use a stable business key or an explicit idempotency key. The server stores the result associated with that key and returns the same outcome when the request is repeated. A database constraint is an important final line of defense.
+
+## Retry only what can succeed later
+
+Retries are useful for transient failures: timeouts, temporary unavailability and some rate limits. Validation errors and broken contracts will not heal with time. Retrying them only creates noise.
+
+A good retry strategy normally includes:
+
+- exponential backoff with jitter;
+- a strict maximum number of attempts;
+- enough context in every attempt to trace the original operation;
+- a dead-letter queue for messages that need investigation or manual recovery.
+
+## Observability is part of the design
+
+A correlation ID should follow the operation across the API, queue and worker. Structured logs can then answer the questions that matter: what was received, which decision was made, how many attempts happened and where processing stopped.
+
+The goal is not to prevent every failure. It is to make failure **safe, visible and recoverable**. That is what turns an API endpoint into a dependable production integration.

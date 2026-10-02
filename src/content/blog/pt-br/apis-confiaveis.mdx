@@ -1,0 +1,35 @@
+---
+title: "APIs confiáveis: idempotência, retentativas e dead-letter queues"
+description: "Uma abordagem prática para criar integrações que se recuperam de falhas sem duplicar operações de negócio."
+pubDate: 2026-10-02
+tags: [APIs, Arquitetura, Confiabilidade]
+featured: true
+locale: pt-br
+slug: pt-br/apis-confiaveis
+translationKey: reliable-apis
+---
+
+Uma integração não é confiável apenas porque funciona no caminho feliz. Ela é confiável quando um timeout, uma requisição duplicada ou a indisponibilidade temporária de uma dependência não corrompem o fluxo de negócio.
+
+## Comece pela operação, não pelo endpoint
+
+Antes de escolher uma política de retentativas, defina o significado da operação. A mesma requisição pode chegar duas vezes? Ela cria um recurso, substitui um estado ou avança um fluxo? A resposta determina onde deve estar a fronteira de idempotência.
+
+Para comandos que precisam acontecer uma única vez, utilizo uma chave de negócio estável ou uma chave de idempotência explícita. O servidor associa o resultado a essa chave e devolve a mesma resposta quando a operação se repete. Uma restrição no banco de dados funciona como a última linha de defesa.
+
+## Tente novamente apenas o que pode melhorar com o tempo
+
+Retentativas são adequadas para falhas transitórias: timeouts, indisponibilidade temporária e alguns limites de requisição. Erros de validação ou contratos quebrados não serão resolvidos esperando. Repeti-los apenas aumenta o ruído.
+
+Uma boa estratégia normalmente inclui:
+
+- backoff exponencial com jitter;
+- limite rígido de tentativas;
+- contexto suficiente para rastrear a operação original;
+- dead-letter queue para mensagens que exigem investigação ou recuperação manual.
+
+## Observabilidade faz parte da arquitetura
+
+Um correlation ID deve acompanhar a operação pela API, fila e worker. Logs estruturados passam a responder o que realmente importa: o que chegou, qual decisão foi tomada, quantas tentativas ocorreram e onde o processamento parou.
+
+O objetivo não é impedir toda falha. É tornar a falha **segura, visível e recuperável**. É isso que transforma um endpoint em uma integração confiável de produção.

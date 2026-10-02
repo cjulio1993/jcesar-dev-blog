@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TechGrid from '@/components/TechGrid.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import PostCard from '@/components/PostCard.astro';
+import { copy, socialLinks } from '@/data/site';
+import { localizedPath, type Locale } from '@/i18n';
+import { calculateReadingTime, postsForLocale } from '@/utils/blog';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = copy[locale];
+const posts = postsForLocale(await getCollection('blog'), locale).slice(0, 3);
+const featuredProjects = t.projects.filter((project: any) => project.featured).slice(0, 3);
+const canonical = `https://jcesar.dev.br${localizedPath(locale)}`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', name: 'Julio Cesar — Software Engineer', url: canonical, inLanguage: locale },
+    { '@type': 'Person', name: 'Julio Cesar', url: canonical, jobTitle: 'Software Engineer', sameAs: [socialLinks.github, socialLinks.linkedin, socialLinks.localCodePilot], knowsAbout: ['PHP', 'Laravel', 'REST APIs', 'SOAP', 'Vue.js', 'Rust', 'Software Architecture', 'Financial Integrations'] }
+  ]
+};
+---
+
+<BaseLayout title={t.meta.title} description={t.meta.description} canonical={canonical} structuredData={structuredData}>
+  <section class="hero container-shell">
+    <div class="hero-grid">
+      <div data-reveal>
+        <div class="availability"><span class="availability-dot"></span>{t.hero.availability}</div>
+        <p class="hero-kicker">{t.hero.kicker}</p>
+        <h1 class="hero-title">{t.hero.title}</h1>
+        <p class="hero-intro">{t.hero.intro}</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href={localizedPath(locale, 'projects')}>{t.hero.primary}<span class="button-arrow">→</span></a>
+          <a class="button button-secondary" href={localizedPath(locale, 'blog')}>{t.hero.secondary}<span class="button-arrow">↗</span></a>
+        </div>
+        <div class="hero-social">
+          <a href={socialLinks.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <span>{t.hero.location}</span>
+        </div>
+      </div>
+
+      <div class="profile-composition" data-reveal data-reveal-delay="2">
+        <div class="profile-frame">
+          <img src="/profile-placeholder.svg" alt={t.hero.photoAlt} width="800" height="1000" />
+          <span class="profile-label">{t.hero.photoHint}</span>
+        </div>
+        <div class="code-card" aria-hidden="true">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          {t.hero.codeLines.map((line: string) => <code>{line}</code>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-shell" aria-label="Career highlights">
+    <div class="stats-grid">
+      {t.stats.map((stat: any) => <div class="stat" data-reveal><span class="stat-value">{stat.value}</span><span class="stat-label">{stat.label}</span></div>)}
+    </div>
+  </section>
+
+  <section class="section container-shell">
+    <div data-reveal>
+      <p class="eyebrow">{t.sections.stackEyebrow}</p>
+      <h2 class="section-heading">{t.sections.stackTitle}</h2>
+      <p class="section-intro">{t.sections.stackText}</p>
+    </div>
+    <TechGrid />
+  </section>
+
+  <section class="section container-shell">
+    <div class="section-header-row" data-reveal>
+      <div><p class="eyebrow">{t.sections.workEyebrow}</p><h2 class="section-heading">{t.sections.workTitle}</h2><p class="section-intro">{t.sections.workText}</p></div>
+      <a class="button button-secondary" href={localizedPath(locale, 'projects')}>{t.ui.viewAll}<span class="button-arrow">→</span></a>
+    </div>
+    <div class="project-grid">{featuredProjects.map((project: any, index: number) => <ProjectCard project={project} index={index} locale={locale} />)}</div>
+  </section>
+
+  <section class="section container-shell">
+    <div data-reveal><p class="eyebrow">{t.sections.experienceEyebrow}</p><h2 class="section-heading">{t.sections.experienceTitle}</h2></div>
+    <div class="timeline">
+      {t.experience.map((item: any) => <article class="timeline-item" data-reveal><p class="timeline-period">{item.period}</p><div class="timeline-content"><h3>{item.role}</h3><p class="timeline-company">{item.company}</p><p>{item.text}</p></div></article>)}
+    </div>
+  </section>
+
+  {posts.length > 0 && <section class="section container-shell">
+    <div class="section-header-row" data-reveal>
+      <div><p class="eyebrow">{t.sections.writingEyebrow}</p><h2 class="section-heading">{t.sections.writingTitle}</h2><p class="section-intro">{t.sections.writingText}</p></div>
+      <a class="button button-secondary" href={localizedPath(locale, 'blog')}>{t.ui.viewAll}<span class="button-arrow">→</span></a>
+    </div>
+    <div class="post-grid">{posts.map((post) => <PostCard post={post} readingTime={calculateReadingTime(post.body)} />)}</div>
+  </section>}
+
+  <section class="section container-shell">
+    <div class="cta-panel" data-reveal>
+      <div><h2>{t.sections.ctaTitle}</h2><p>{t.sections.ctaText}</p></div>
+      <a class="button button-primary" href={localizedPath(locale, 'contact')}>{t.sections.ctaButton}<span class="button-arrow">→</span></a>
+    </div>
+  </section>
+</BaseLayout>
+

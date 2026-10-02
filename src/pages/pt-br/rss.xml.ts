@@ -1,9 +1,9 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { postUrl, sortedPosts } from '@/utils/blog';
+import { postUrl, postsForLocale } from '@/utils/blog';
 
 export async function GET(context: { site: URL }) {
-  const posts = sortedPosts(await getCollection('blog'));
+  const posts = postsForLocale(await getCollection('blog'), 'pt-br');
 
   return rss({
     title: 'jcesar.dev.br (PT-BR)',
@@ -13,7 +13,7 @@ export async function GET(context: { site: URL }) {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      link: `/pt-br${postUrl(post)}`
+      link: postUrl(post)
     })),
     customData: '<language>pt-br</language>'
   });

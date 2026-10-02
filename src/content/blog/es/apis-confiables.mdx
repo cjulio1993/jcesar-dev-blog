@@ -1,0 +1,35 @@
+---
+title: "APIs confiables: idempotencia, reintentos y dead-letter queues"
+description: "Una forma práctica de crear integraciones que se recuperan de fallos sin duplicar operaciones de negocio."
+pubDate: 2026-10-02
+tags: [APIs, Arquitectura, Confiabilidad]
+featured: true
+locale: es
+slug: es/apis-confiables
+translationKey: reliable-apis
+---
+
+Una integración no es confiable solo porque funciona en el camino ideal. Es confiable cuando un timeout, una solicitud duplicada o la indisponibilidad temporal de una dependencia no corrompen el flujo de negocio.
+
+## Empieza por la operación, no por el endpoint
+
+Antes de elegir una política de reintentos, define el significado de la operación. ¿La misma solicitud puede llegar dos veces? ¿Crea un recurso, reemplaza un estado o avanza un flujo? La respuesta determina dónde debe estar el límite de idempotencia.
+
+Para comandos que deben ejecutarse una sola vez, utilizo una clave de negocio estable o una clave de idempotencia explícita. El servidor guarda el resultado asociado y devuelve la misma respuesta cuando se repite la operación. Una restricción en la base de datos es la última línea de defensa.
+
+## Reintenta solo lo que puede mejorar con el tiempo
+
+Los reintentos sirven para fallos transitorios: timeouts, indisponibilidad temporal y algunos límites de solicitudes. Los errores de validación y los contratos rotos no se corrigen esperando.
+
+Una buena estrategia suele incluir:
+
+- backoff exponencial con jitter;
+- un límite estricto de intentos;
+- contexto suficiente para rastrear la operación original;
+- una dead-letter queue para mensajes que requieren investigación o recuperación manual.
+
+## La observabilidad forma parte del diseño
+
+Un correlation ID debe acompañar la operación por la API, la cola y el worker. Los logs estructurados pueden responder qué llegó, qué decisión se tomó, cuántos intentos ocurrieron y dónde se detuvo el procesamiento.
+
+El objetivo no es impedir todos los fallos. Es hacerlos **seguros, visibles y recuperables**. Eso convierte un endpoint en una integración confiable de producción.

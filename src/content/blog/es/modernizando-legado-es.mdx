@@ -1,0 +1,30 @@
+---
+title: "Modernizar software heredado sin apostar el negocio"
+description: "Cómo sustituir componentes críticos gradualmente, protegiendo el comportamiento actual y la estabilidad de producción."
+pubDate: 2026-09-25
+tags: [Legado, Arquitectura, Pruebas]
+featured: true
+locale: es
+slug: es/modernizando-legado
+translationKey: modernizing-legacy
+---
+
+Reescribir un sistema heredado puede parecer más limpio en un diagrama que mejorarlo gradualmente. En producción, el código antiguo suele contener años de decisiones de negocio nunca documentadas. Reemplazar todo de una vez cambia limitaciones conocidas por riesgos desconocidos.
+
+## Mapea el comportamiento antes de cambiar la estructura
+
+El primer paso no es elegir un framework nuevo. Es entender entradas, salidas, efectos secundarios y escenarios de fallo. Los logs, rastros en la base de datos y conversaciones con expertos del dominio pueden ser más valiosos que la documentación original.
+
+Convierto ese mapa en pruebas alrededor del límite que cambiará. No son solo pruebas unitarias: las pruebas de contrato e integración protegen el comportamiento del que ya dependen los consumidores.
+
+## Crea un punto de transición controlado
+
+En lugar de enviar todo el tráfico al componente nuevo, crea un límite explícito. Un adaptador puede traducir el contrato antiguo al modelo nuevo. Feature flags, rutas o reglas por cliente permiten mover un escenario a la vez.
+
+Cada etapa se vuelve reversible. Si aparece un caso inesperado, el equipo puede aislarlo sin descartar todo el trabajo de modernización.
+
+## Observa ambos caminos
+
+Durante la transición, compara resultados en lugar de confiar solo en la inspección. Observa códigos de respuesta, tiempo de procesamiento, registros generados y patrones de error. Los logs estructurados y correlation IDs facilitan seguir ambos flujos.
+
+El mejor plan de modernización rara vez es el más dramático. Es el que permite aprender continuamente, reducir riesgo con cada entrega y dejar el sistema más fácil de evolucionar.

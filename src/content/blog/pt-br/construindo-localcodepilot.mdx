@@ -1,0 +1,30 @@
+---
+title: "De projeto de aprendizado ao primeiro release do LocalCodePilot"
+description: "O que construir uma ferramenta desktop em Rust me ensinou sobre escopo, processos e lançamentos públicos."
+pubDate: 2026-09-22
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: pt-br
+slug: pt-br/construindo-localcodepilot
+translationKey: building-localcodepilot
+---
+
+O LocalCodePilot começou com uma pergunta simples: por que iniciar um projeto local precisa exigir que eu me lembre de comandos diferentes toda vez?
+
+A primeira versão útil não precisava gerenciar todos os runtimes nem substituir containers. Precisava detectar um projeto, entender o comando de desenvolvimento mais provável e iniciá-lo com feedback claro.
+
+## Detectar é mais do que encontrar arquivos
+
+Arquivos como `Cargo.toml`, `package.json`, `composer.json` e `pyproject.toml` revelam as tecnologias de um repositório. Nem sempre revelam qual processo representa a aplicação principal.
+
+Um projeto Laravel, por exemplo, pode expor o Vite e o `php artisan serve`. A ferramenta precisa entender contexto: um processo cuida dos assets e hot reload, enquanto o outro serve a aplicação. Tratar todo script como equivalente produz uma interface barulhenta.
+
+## Um processo tem ciclo de vida
+
+Executar um comando é fácil. Uma ferramenta útil também precisa saber se o processo continua rodando, qual PID pertence a ele, onde está a saída e como ele terminou. Isso transformou o projeto de um launcher em um exercício de supervisão de processos.
+
+## Publicar cria perguntas melhores
+
+Lançar a primeira versão me obrigou a melhorar documentação, produzir binários reproduzíveis e decidir o que realmente pertencia ao escopo inicial. O roadmap também ficou concreto: logs, portas, detecção de runtimes e atualizações seguras são problemas reais de usuário.
+
+A principal lição foi simples: uma versão focada ensina mais do que um protótipo ambicioso. O LocalCodePilot continua evoluindo, mas agora é um produto open source real, capaz de crescer pelo uso e pelo feedback.

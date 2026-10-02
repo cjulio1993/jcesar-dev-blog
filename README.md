@@ -1,59 +1,42 @@
-# jcesar.dev.br
+# Julio Cesar — Portfolio & Blog
 
-Modern developer blog built with **Astro + TailwindCSS** focused on PHP, Laravel, backend engineering, APIs, and software architecture.
+Personal website at [jcesar.dev.br](https://jcesar.dev.br), combining a software engineering portfolio with a multilingual technical blog.
 
-## Tech stack
+## Highlights
 
-- Astro (latest)
-- TailwindCSS
+- English, Brazilian Portuguese and Spanish routes
+- Portfolio based on real projects and anonymized production case studies
+- MDX blog with localized posts, reading time and related content
+- Responsive light/dark interface with accessible motion
+- Client-side article search and project filtering
+- SEO metadata, JSON-LD, hreflang, sitemap, robots and RSS feeds
+- Automatic deployment to GitHub Pages
+
+## Stack
+
+- Astro 6
+- TypeScript
+- Tailwind CSS
 - MDX content collections
-- Fully static output optimized for Vercel/Netlify
-- RSS + Sitemap + SEO metadata
+- GitHub Actions / GitHub Pages
 
-## Features
-
-- Home, Blog, Post, About, Projects, Contact pages
-- MDX blog posts with typed content collections
-- Syntax highlighting with Shiki (light + dark theme)
-- Reading time, featured posts, related posts
-- Tag filtering, pagination and client-side search
-- Canonical URLs, Open Graph, Twitter cards, structured data (JSON-LD)
-- RSS feed, sitemap and robots.txt
-- Dark mode with persisted preference
-- Mobile-first responsive design and animated interactions
-
-## Commands
+## Local development
 
 ```bash
-npm install
+npm ci
 npm run dev
 npm run check
 npm run build
-npm run preview
 ```
 
-## Project structure
+## Adding a post
 
-```text
-src/
-	components/      # Reusable UI components
-	content/blog/    # MD/MDX posts
-	layouts/         # Base and post layouts
-	pages/           # Route pages + RSS + robots
-	styles/          # Global Tailwind styles
-	utils/           # Blog + SEO helpers
-```
+Create an `.mdx` file under `src/content/blog/<locale>/` using the schema in `src/content.config.ts`. Localized variants share a `translationKey` and use unique prefixed slugs such as `pt-br/my-post`.
+
+## Replacing the profile photo
+
+Replace `public/profile-placeholder.svg` with a portrait using the same filename, or update the two image references in `HomePage.astro` and `AboutPage.astro`.
 
 ## Deployment
 
-The project is static (`output: "static"`) and ready for free hosting:
-
-- Vercel: automatic deploy via `.github/workflows/ci-cd.yml`
-- Netlify: connect repository and set build command `npm run build`, publish directory `dist`
-- Netlify config is included in `netlify.toml`
-
-Required Vercel secrets for the workflow:
-
-- `VERCEL_ORG_ID`
-- `VERCEL_PROJECT_ID`
-- `VERCEL_TOKEN`
+Pushes to `main` run type checking, build the static site and deploy `dist/` through GitHub Pages. The custom domain is configured through `public/CNAME`.
