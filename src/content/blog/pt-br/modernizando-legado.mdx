@@ -1,0 +1,30 @@
+---
+title: "Modernizando software legado sem apostar o negócio"
+description: "Como substituir componentes críticos gradualmente, protegendo o comportamento atual e mantendo a produção estável."
+pubDate: 2026-09-25
+tags: [Legado, Arquitetura, Testes]
+featured: true
+locale: pt-br
+slug: pt-br/modernizando-legado
+translationKey: modernizing-legacy
+---
+
+Reescrever um sistema legado pode parecer mais limpo no diagrama do que melhorá-lo aos poucos. Em produção, porém, o código antigo costuma carregar anos de decisões de negócio que nunca foram documentadas. Substituir tudo de uma vez troca limitações conhecidas por riscos desconhecidos.
+
+## Mapeie o comportamento antes de mudar a estrutura
+
+O primeiro passo não é escolher um framework novo. É entender entradas, saídas, efeitos colaterais e cenários de falha. Logs, rastros no banco e conversas com especialistas do domínio podem ser mais valiosos do que a documentação original.
+
+Transformo esse mapa em testes ao redor da fronteira que será alterada. Não são apenas testes unitários: testes de contrato e integração protegem o comportamento do qual os consumidores já dependem.
+
+## Crie um ponto de transição controlado
+
+Em vez de direcionar todo o tráfego ao componente novo, crie uma fronteira explícita. Um adapter pode traduzir o contrato antigo para o modelo novo. Feature flags, rotas ou regras por cliente permitem mover um cenário por vez.
+
+Cada etapa se torna reversível. Se aparecer um caso inesperado, a equipe consegue isolá-lo sem descartar todo o trabalho de modernização.
+
+## Observe os dois caminhos
+
+Durante a transição, compare resultados em vez de confiar apenas na leitura do código. Observe status, tempo de processamento, registros gerados e padrões de erro. Logs estruturados e correlation IDs ajudam a seguir os fluxos antigo e novo.
+
+O melhor plano de modernização raramente é o mais dramático. É aquele que permite aprender continuamente, reduzir risco a cada entrega e deixar o sistema mais fácil de evoluir do que era antes.

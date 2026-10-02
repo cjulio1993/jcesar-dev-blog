@@ -1,0 +1,13 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '@/layouts/PostLayout.astro';
+import { calculateReadingTime, cleanPostSlug, postsForLocale } from '@/utils/blog';
+export async function getStaticPaths() {
+  const posts = postsForLocale(await getCollection('blog'), 'es');
+  return posts.map((post) => ({ params: { slug: cleanPostSlug(post) }, props: { post, allPosts: posts } }));
+}
+const { post, allPosts } = Astro.props;
+const { Content } = await render(post);
+---
+<PostLayout post={post} allPosts={allPosts} readingTime={calculateReadingTime(post.body)}><Content /></PostLayout>
+

@@ -1,4 +1,4 @@
-name: CI/CD
+name: Build and deploy to GitHub Pages
 
 on:
   push:
@@ -7,8 +7,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
-  group: ci-cd-${{ github.ref }}
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -23,21 +28,19 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
-  deploy-vercel:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm i -g vercel@latest
-      - run: vercel pull --yes --environment=production --token=${VERCEL_TOKEN}
-      - run: vercel build --prod --token=${VERCEL_TOKEN}
-      - run: vercel deploy --prebuilt --prod --token=${VERCEL_TOKEN}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

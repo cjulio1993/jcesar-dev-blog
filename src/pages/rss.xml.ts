@@ -1,9 +1,9 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { postUrl, sortedPosts } from '@/utils/blog';
+import { postUrl, postsForLocale } from '@/utils/blog';
 
 export async function GET(context: { site: URL }) {
-  const posts = sortedPosts(await getCollection('blog'));
+  const posts = postsForLocale(await getCollection('blog'), 'en');
 
   return rss({
     title: 'jcesar.dev.br',

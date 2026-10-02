@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { copy } from '@/data/site';
+import { localizedPath, type Locale } from '@/i18n';
+import { calculateReadingTime, postsForLocale } from '@/utils/blog';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = copy[locale];
+const posts = postsForLocale(await getCollection('blog'), locale);
+const canonical = `https://jcesar.dev.br${localizedPath(locale, 'blog')}`;
+---
+<BaseLayout title={`${t.nav.blog} | Julio Cesar`} description={t.blog.text} canonical={canonical}>
+  <header class="page-hero container-shell" data-reveal><p class="eyebrow">{t.nav.blog}</p><h1>{t.blog.title}</h1><p class="lead">{t.blog.text}</p></header>
+  <section class="section-compact container-shell">
+    <div class="blog-tools"><input class="search-field" type="search" placeholder={t.ui.search} aria-label={t.ui.search} data-blog-search /><p class="search-count" data-search-count>{posts.length}</p></div>
+    <div class="post-grid" data-blog-grid>{posts.map((post) => <PostCard post={post} readingTime={calculateReadingTime(post.body)} />)}</div>
+    <p class="content-card" data-empty-state hidden>{t.ui.noResults}</p>
+  </section>
+  <script>
+    const input = document.querySelector<HTMLInputElement>('[data-blog-search]');
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-post-card]'));
+    const count = document.querySelector<HTMLElement>('[data-search-count]');
+    const empty = document.querySelector<HTMLElement>('[data-empty-state]');
+    const normalize = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    input?.addEventListener('input', () => {
+      const query = normalize(input.value);
+      let visible = 0;
+      cards.forEach((card) => {
+        const match = !query || normalize(card.dataset.search ?? '').includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+      if (count) count.textContent = String(visible);
+      if (empty) empty.hidden = visible !== 0;
+    });
+  </script>
+</BaseLayout>
+

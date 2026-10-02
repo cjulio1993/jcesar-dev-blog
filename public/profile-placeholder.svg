@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Profile photo placeholder</title>
+  <desc id="desc">Replace this file with Julio Cesar's professional portrait.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#202b22"/><stop offset="1" stop-color="#0d1210"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#9ed849" stop-opacity=".38"/><stop offset="1" stop-color="#9ed849" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0v48" fill="none" stroke="#c4dbac" stroke-opacity=".08"/></pattern>
+  </defs>
+  <rect width="800" height="1000" fill="url(#bg)"/>
+  <circle cx="610" cy="240" r="310" fill="url(#glow)"/>
+  <rect width="800" height="1000" fill="url(#grid)"/>
+  <circle cx="400" cy="385" r="135" fill="#dbe7d1" fill-opacity=".16" stroke="#b8d498" stroke-opacity=".28" stroke-width="3"/>
+  <path d="M160 870c28-197 119-302 240-302s212 105 240 302" fill="#dbe7d1" fill-opacity=".12" stroke="#b8d498" stroke-opacity=".28" stroke-width="3"/>
+  <text x="400" y="930" text-anchor="middle" font-family="monospace" font-size="25" letter-spacing="6" fill="#a9dd53">JULIO CESAR</text>
+</svg>
+

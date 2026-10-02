@@ -1,0 +1,20 @@
+---
+import { copy } from '@/data/site';
+import type { Locale } from '@/i18n';
+interface Props { project: any; index: number; locale: Locale; }
+const { project, index, locale } = Astro.props;
+const t = copy[locale];
+---
+<article class="project-card" data-spotlight data-reveal data-project={project.featured ? 'featured' : 'case-study'}>
+  <span class="project-number">{String(index + 1).padStart(2, '0')}</span>
+  <p class="project-eyebrow">{project.eyebrow}</p>
+  <h3>{project.title}</h3>
+  <p class="project-description">{project.description}</p>
+  <p class="project-impact">{project.impact}</p>
+  <div class="tag-list">{project.stack.map((item: string) => <span class="tag">{item}</span>)}</div>
+  {(project.href || project.repo) && <div class="project-links">
+    {project.href && <a href={project.href} target="_blank" rel="noreferrer">{t.ui.viewProject} ↗</a>}
+    {project.repo && <a href={project.repo} target="_blank" rel="noreferrer">{t.ui.source} ↗</a>}
+  </div>}
+</article>
+

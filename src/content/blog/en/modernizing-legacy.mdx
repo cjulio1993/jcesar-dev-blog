@@ -1,0 +1,30 @@
+---
+title: "Modernizing legacy software without betting the business"
+description: "How to replace critical components gradually while protecting current behavior and keeping production stable."
+pubDate: 2026-09-25
+tags: [Legacy, Architecture, Testing]
+featured: true
+locale: en
+slug: en/modernizing-legacy
+translationKey: modernizing-legacy
+---
+
+Rewriting a legacy system can look cleaner on a diagram than improving it in place. In production, however, the old code often contains years of undocumented business decisions. Replacing everything at once replaces known limitations with unknown risk.
+
+## Map behavior before changing structure
+
+The first step is not a new framework. It is understanding the existing inputs, outputs, side effects and failure scenarios. Logs, database traces and conversations with domain experts are often more valuable here than the original documentation.
+
+I turn that map into tests around the boundary that will change. These are not only unit tests. Contract and integration tests protect the behavior that consumers already depend on.
+
+## Create a controlled seam
+
+Instead of sending all traffic to the new component, create an explicit boundary. An adapter can translate the old contract into the new model. A feature flag, route or client rule can move one scenario at a time.
+
+This makes each migration step reversible. If an unexpected case appears, the team can isolate it without discarding the entire modernization effort.
+
+## Observe both paths
+
+During transition, measure outcomes instead of trusting equivalence by inspection. Compare response codes, processing time, generated records and error patterns. Structured logs with correlation IDs make the old and new paths easier to follow.
+
+The strongest modernization plan is rarely the most dramatic. It is the one that lets the team learn continuously, reduce risk with every release and leave the system easier to change than it was before.

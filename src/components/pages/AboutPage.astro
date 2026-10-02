@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TechGrid from '@/components/TechGrid.astro';
+import { copy } from '@/data/site';
+import { localizedPath, type Locale } from '@/i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = copy[locale];
+const canonical = `https://jcesar.dev.br${localizedPath(locale, 'about')}`;
+---
+<BaseLayout title={`${t.nav.about} | Julio Cesar`} description={t.about.lead} canonical={canonical}>
+  <header class="page-hero container-shell" data-reveal><p class="eyebrow">{t.nav.about}</p><h1>{t.about.title}</h1><p class="lead">{t.about.lead}</p></header>
+  <section class="section container-shell about-grid">
+    <div class="about-photo" data-reveal><div class="profile-frame"><img src="/profile-placeholder.svg" alt={t.hero.photoAlt} width="800" height="1000" /></div></div>
+    <div>
+      <div class="about-copy" data-reveal>{t.about.body.map((paragraph: string) => <p>{paragraph}</p>)}</div>
+      <div class="detail-grid">
+        <article class="content-card" data-spotlight data-reveal><h2>{t.about.educationTitle}</h2><ul class="clean-list">{t.about.education.map((item: string) => <li>{item}</li>)}{t.about.languages.map((item: string) => <li>{item}</li>)}</ul></article>
+        <article class="content-card" data-spotlight data-reveal><h2>{t.sections.experienceEyebrow}</h2><ul class="clean-list">{t.experience.map((item: any) => <li><strong>{item.role}</strong><br />{item.company}</li>)}</ul></article>
+      </div>
+    </div>
+  </section>
+  <section class="section-compact container-shell">
+    <p class="eyebrow">{t.about.principlesTitle}</p>
+    <div class="principles-grid">{t.about.principles.map((item: any, index: number) => <article class="principle-card" data-spotlight data-reveal><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.text}</p></article>)}</div>
+  </section>
+  <section class="section container-shell"><p class="eyebrow">{t.sections.stackEyebrow}</p><h2 class="section-heading">{t.sections.stackTitle}</h2><TechGrid /></section>
+</BaseLayout>
+

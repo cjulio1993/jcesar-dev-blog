@@ -1,0 +1,12 @@
+---
+import { technologies } from '@/data/site';
+---
+<div class="tech-grid">
+  {technologies.map((tech, index) => (
+    <div class="tech-card" data-reveal data-reveal-delay={String(index % 3)}>
+      <img src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${tech.icon}`} alt={tech.name} width="42" height="42" loading="lazy" />
+      <span>{tech.name}</span>
+    </div>
+  ))}
+</div>
+

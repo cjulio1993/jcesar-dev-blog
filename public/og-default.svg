@@ -1,6 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
-  <rect width="1200" height="630" fill="#09090B"/>
-  <rect x="64" y="64" width="1072" height="502" rx="24" fill="#111827" stroke="#27272A"/>
-  <text x="120" y="280" fill="#E4E4E7" font-family="Inter, sans-serif" font-size="56" font-weight="700">jcesar.dev.br</text>
-  <text x="120" y="350" fill="#34D399" font-family="Inter, sans-serif" font-size="32">PHP · Laravel · APIs · Architecture</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#080b0b"/><stop offset="1" stop-color="#151d17"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#a9dd53" stop-opacity=".3"/><stop offset="1" stop-color="#a9dd53" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse"><path d="M54 0H0v54" fill="none" stroke="#e3efdd" stroke-opacity=".07"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1020" cy="70" r="460" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <text x="92" y="116" fill="#a9dd53" font-family="monospace" font-size="25" letter-spacing="4">SOFTWARE ENGINEER · BACKEND &amp; INTEGRATIONS</text>
+  <text x="92" y="280" fill="#f0f5ec" font-family="Arial, sans-serif" font-size="84" font-weight="700">Julio Cesar</text>
+  <text x="92" y="385" fill="#f0f5ec" font-family="Arial, sans-serif" font-size="55" font-weight="700">Reliable software for</text>
+  <text x="92" y="456" fill="#a9dd53" font-family="Arial, sans-serif" font-size="55" font-weight="700">complex, real-world systems.</text>
+  <text x="92" y="552" fill="#9ba79a" font-family="monospace" font-size="26">jcesar.dev.br  ·  PHP  ·  Laravel  ·  Vue  ·  Rust</text>
 </svg>
