@@ -10,7 +10,7 @@ Personal website at [jcesar.dev.br](https://jcesar.dev.br), combining a software
 - Responsive light/dark interface with accessible motion
 - Client-side article search and project filtering
 - SEO metadata, JSON-LD, hreflang, sitemap, robots and RSS feeds
-- Automatic deployment to GitHub Pages
+- Automatic deployment to Vercel
 
 ## Stack
 
@@ -18,7 +18,7 @@ Personal website at [jcesar.dev.br](https://jcesar.dev.br), combining a software
 - TypeScript
 - Tailwind CSS
 - MDX content collections
-- GitHub Actions / GitHub Pages
+- GitHub Actions / Vercel
 
 ## Local development
 
@@ -39,4 +39,4 @@ Replace `public/profile-placeholder.svg` with a portrait using the same filename
 
 ## Deployment
 
-Pushes to `main` run type checking, build the static site and deploy `dist/` through GitHub Pages. The custom domain is configured through `public/CNAME`.
+GitHub Actions runs type checking and builds the static site on pushes and pull requests to `main`. Deployment is handled directly by the Vercel integration. The custom domain is configured in Vercel.
