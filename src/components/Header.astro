@@ -31,7 +31,7 @@ const navItems = [
     <div class="header-actions">
       <div class="language-switcher" aria-label={t.ui.language}>
         {locales.map((item) => (
-          <a class:list={['language-option', { active: item === locale }]} href={switchLocalePath(path, item)} lang={localeMeta[item].html}>{localeMeta[item].short}</a>
+          <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchLocalePath(path, item)} lang={localeMeta[item].html}>{localeMeta[item].short}</a>
         ))}
       </div>
       <button id="theme-toggle" class="icon-button" type="button" aria-label={t.ui.theme} title={t.ui.theme}>
@@ -46,13 +46,19 @@ const navItems = [
     <div class="container-shell mobile-nav-inner">
       {navItems.map((item) => <a class:list={['mobile-nav-link', { active: item.match }]} href={item.href}>{item.label}</a>)}
       <div class="mobile-languages">
-        {locales.map((item) => <a class:list={['language-option', { active: item === locale }]} href={switchLocalePath(path, item)}>{localeMeta[item].label}</a>)}
+        {locales.map((item) => <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchLocalePath(path, item)}>{localeMeta[item].label}</a>)}
       </div>
     </div>
   </nav>
 </header>
 
 <script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-locale]').forEach((link) => {
+    link.addEventListener('click', () => {
+      try { localStorage.setItem('preferred-locale', link.dataset.locale!); } catch {}
+    });
+  });
+
   const themeButton = document.querySelector<HTMLButtonElement>('#theme-toggle');
   const mobileButton = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
   const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]');
