@@ -36,7 +36,7 @@ const sharedProjects = {
   banking: {
     title: 'Financial Integration API',
     eyebrow: 'Production · Financial integration',
-    stack: ['PHP', 'Laravel/Lumen', 'Queues', 'SQL Server'],
+    stack: ['PHP', 'Laravel/Symfony', 'Queues', 'SQL Server'],
     featured: true
   },
   taskflow: {
@@ -106,7 +106,7 @@ export const copy: Record<Locale, any> = {
       title: 'Engineering with context, not just code.',
       lead: 'I am Julio Cesar, a Brazilian software engineer focused on backend systems, APIs and integrations that need to remain understandable under real production pressure.',
       body: [
-        'My main stack is PHP with Laravel and Lumen, supported by Vue, JavaScript/TypeScript and relational databases. I work with REST and SOAP integrations, asynchronous processing, authentication, rate limiting, observability and automated testing.',
+        'My main stack is PHP with Laravel and Symfony, supported by Vue, JavaScript/TypeScript and relational databases. I work with REST and SOAP integrations, asynchronous processing, authentication, rate limiting, observability and automated testing.',
         'I prefer evolutionary architecture: understand the risks, protect current behavior with tests and modernize in small, reversible steps. This approach has been especially valuable when replacing legacy components without interrupting critical business flows.',
         'Outside work, I build LocalCodePilot in Rust and document what I learn. I care about developer experience, clear communication and software that leaves a codebase better than I found it.'
       ],
@@ -176,7 +176,7 @@ export const copy: Record<Locale, any> = {
       title: 'Engenharia com contexto, não apenas código.',
       lead: 'Sou Julio Cesar, engenheiro de software brasileiro focado em sistemas backend, APIs e integrações que precisam continuar compreensíveis sob a pressão real da produção.',
       body: [
-        'Minha stack principal é PHP com Laravel e Lumen, apoiada por Vue, JavaScript/TypeScript e bancos relacionais. Trabalho com integrações REST e SOAP, processamento assíncrono, autenticação, rate limiting, observabilidade e testes automatizados.',
+        'Minha stack principal é PHP com Laravel e Symfony, apoiada por Vue, JavaScript/TypeScript e bancos relacionais. Trabalho com integrações REST e SOAP, processamento assíncrono, autenticação, rate limiting, observabilidade e testes automatizados.',
         'Prefiro arquitetura evolutiva: entender riscos, proteger o comportamento atual com testes e modernizar em passos pequenos e reversíveis. Essa abordagem é especialmente valiosa ao substituir componentes legados sem interromper fluxos críticos.',
         'Fora do trabalho, desenvolvo o LocalCodePilot em Rust e documento o que aprendo. Valorizo experiência do desenvolvedor, comunicação clara e software que deixa o código melhor do que encontrei.'
       ],
@@ -246,7 +246,7 @@ export const copy: Record<Locale, any> = {
       title: 'Ingeniería con contexto, no solo código.',
       lead: 'Soy Julio Cesar, ingeniero de software brasileño enfocado en sistemas backend, APIs e integraciones que deben seguir siendo comprensibles bajo la presión real de producción.',
       body: [
-        'Mi stack principal es PHP con Laravel y Lumen, apoyado por Vue, JavaScript/TypeScript y bases de datos relacionales. Trabajo con integraciones REST y SOAP, procesamiento asíncrono, autenticación, rate limiting, observabilidad y pruebas automatizadas.',
+        'Mi stack principal es PHP con Laravel y Symfony, apoyado por Vue, JavaScript/TypeScript y bases de datos relacionales. Trabajo con integraciones REST y SOAP, procesamiento asíncrono, autenticación, rate limiting, observabilidad y pruebas automatizadas.',
         'Prefiero la arquitectura evolutiva: entender riesgos, proteger el comportamiento actual con pruebas y modernizar en pasos pequeños y reversibles. Este enfoque es especialmente valioso al reemplazar componentes heredados sin interrumpir flujos críticos.',
         'Fuera del trabajo, desarrollo LocalCodePilot en Rust y documento lo que aprendo. Valoro la experiencia del desarrollador, la comunicación clara y el software que deja el código mejor de lo que lo encontré.'
       ],
