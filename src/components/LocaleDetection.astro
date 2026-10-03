@@ -1,0 +1,22 @@
+<script is:inline>
+  (() => {
+    // Only the entry page negotiates language; shared links keep their locale.
+    if (window.location.pathname !== '/') return;
+    const supported = ['en', 'pt-br', 'es'];
+    let preferred;
+    try { preferred = localStorage.getItem('preferred-locale'); } catch {}
+    if (!supported.includes(preferred)) {
+      const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+      preferred = 'en';
+      for (const language of languages) {
+        const base = (language || '').toLowerCase().split('-')[0];
+        if (base === 'pt') { preferred = 'pt-br'; break; }
+        if (base === 'es' || base === 'en') { preferred = base; break; }
+      }
+    }
+    if (preferred === 'en') return;
+    const destination = new URL(window.location.href);
+    destination.pathname = preferred === 'pt-br' ? '/pt-br/' : '/es/';
+    window.location.replace(destination.href);
+  })();
+</script>
