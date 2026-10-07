@@ -4,7 +4,7 @@ export const socialLinks = {
   github: 'https://github.com/cjulio1993',
   linkedin: 'https://www.linkedin.com/in/julio-cesar-70938b60',
   localCodePilot: 'https://localcodepilot.com.br',
-  email: 'mailto:hello@jcesar.dev.br'
+  email: 'mailto:juliocs78383@gmail.com'
 };
 
 export const technologies = [
