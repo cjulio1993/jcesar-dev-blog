@@ -1,0 +1,44 @@
+---
+title: "LocalCodePilot alpha 0.4.0: puertos, contexto persistente y actualizaciones"
+description: "Cómo LocalCodePilot pasó a detectar conflictos de puertos, vigilar la salud de los servicios y recuperar el contexto de desarrollo."
+pubDate: 2026-10-06
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: es
+slug: es/localcodepilot-alpha-0-4-0
+translationKey: localcodepilot-alpha-0-4-0
+---
+
+Hoy LocalCodePilot dio un paso importante para dejar de ser solamente un iniciador de procesos y convertirse en un compañero más confiable para el desarrollo local. La versión `0.4.0-alpha.1` fue preparada alrededor de tres áreas principales: gestión de puertos, persistencia del contexto de los proyectos y comprobación de actualizaciones.
+
+El trabajo modificó 17 archivos y añadió más de 2.300 líneas. Esa cifra muestra el tamaño de la actualización, pero el resultado práctico es más importante: iniciar un entorno, entender qué ocurrió y continuar después de volver a abrir la aplicación ahora es más predecible.
+
+## Los puertos ahora forman parte del ciclo de vida
+
+Antes de iniciar un servicio, LocalCodePilot ahora determina el puerto esperado. Reconoce puertos explícitos en los comandos y también los valores habituales: `5173` para Vite, `3000` para Next.js, React y Nuxt, `4321` para Astro, `8080` para Webpack y `8000` para Laravel y Django.
+
+Si el puerto está ocupado, la herramienta busca el siguiente disponible y ajusta el comando cuando puede hacerlo de forma segura. En Windows también puede identificar el nombre y el PID del proceso que provoca el conflicto. Finalizar ese proceso sigue siendo una decisión explícita del usuario.
+
+El cambio no termina al iniciar. El servicio permanece en estado "iniciando" hasta que el puerto realmente esté escuchando. Después, LocalCodePilot supervisa el puerto para detectar tiempos de espera, cierres inesperados o la caída del servicio. La comprobación incluye listeners IPv4 e IPv6, evitando falsos avisos con herramientas como Vite en Windows.
+
+Cuando algo falla, los logs se analizan para ofrecer una sugerencia práctica. En lugar de informar solamente que el proceso terminó, LocalCodePilot puede señalar un conflicto de puerto, una dependencia ausente u otro error reconocido.
+
+## La aplicación recuerda el entorno
+
+Otra parte importante de esta actualización fue conservar el contexto entre sesiones. LocalCodePilot ahora guarda la pantalla seleccionada, el proyecto activo, los favoritos y el orden por uso reciente.
+
+También conserva el puerto elegido, la URL detectada, el último resultado y las 200 líneas de log más recientes de cada servicio. Es posible cerrar la aplicación, abrirla de nuevo y consultar qué ocurrió sin perder el historial inmediato.
+
+La nueva acción **Reanudar entorno** recupera ese contexto sin iniciar procesos automáticamente. La decisión es intencional: la aplicación recuerda el estado del trabajo, pero los comandos solo se ejecutan después de una acción clara del usuario.
+
+## Actualizaciones sin interrumpir el trabajo
+
+La alpha ahora comprueba una vez al día si existen nuevas versiones en GitHub Releases, incluidas las versiones preliminares. La consulta se ejecuta en segundo plano y, cuando hay una actualización, el aviso ofrece acceso a las novedades, al paquete oficial y a la opción de recordarlo más tarde.
+
+Por ahora la instalación sigue siendo manual porque el ejecutable aún no tiene firma digital. El paquete portátil para Windows y su checksum SHA-256 fueron preparados para la nueva versión, junto con la documentación de instalación y las notas del release.
+
+## Qué representa esta etapa
+
+Los puertos, el historial y las actualizaciones pueden parecer funciones separadas, pero resuelven el mismo problema: reducir la cantidad de contexto que el desarrollador necesita mantener en la cabeza. La herramienta ahora sabe dónde debería estar un servicio, confirma que se inició, registra lo ocurrido y ayuda a continuar el trabajo después.
+
+El código de la alpha `0.4.0` ya está en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot). Como el proyecto sigue en alpha pública, los comentarios sobre la detección de comandos, los puertos y el comportamiento en Windows son especialmente útiles.

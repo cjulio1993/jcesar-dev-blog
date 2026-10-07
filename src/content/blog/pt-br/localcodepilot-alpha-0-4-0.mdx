@@ -1,0 +1,44 @@
+---
+title: "LocalCodePilot alpha 0.4.0: portas, contexto persistente e atualizações"
+description: "Como o LocalCodePilot passou a detectar conflitos de porta, acompanhar a saúde dos serviços e retomar o contexto de trabalho."
+pubDate: 2026-10-06
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: pt-br
+slug: pt-br/localcodepilot-alpha-0-4-0
+translationKey: localcodepilot-alpha-0-4-0
+---
+
+Hoje o LocalCodePilot deu um passo importante para deixar de ser apenas um iniciador de processos e se tornar um companheiro mais confiável para o desenvolvimento local. A versão `0.4.0-alpha.1` foi preparada com três frentes principais: gerenciamento de portas, persistência do contexto dos projetos e verificação de atualizações.
+
+Foram 17 arquivos alterados, com mais de 2.300 linhas adicionadas. O número ajuda a mostrar o tamanho da mudança, mas o resultado mais importante aparece no uso diário: iniciar um ambiente, entender o que aconteceu e continuar o trabalho depois de reabrir o aplicativo ficou mais previsível.
+
+## Portas agora fazem parte do ciclo de vida
+
+Antes de iniciar um serviço, o LocalCodePilot agora identifica a porta esperada. Ele reconhece portas explícitas nos comandos e também os padrões mais comuns: `5173` para Vite, `3000` para Next.js, React e Nuxt, `4321` para Astro, `8080` para Webpack e `8000` para Laravel e Django.
+
+Se a porta estiver ocupada, a ferramenta procura a próxima porta livre e ajusta o comando quando isso pode ser feito com segurança. No Windows, ela também consegue identificar o nome e o PID do processo responsável pelo conflito. Encerrar esse processo continua sendo uma decisão explícita do usuário.
+
+A mudança não termina na inicialização. O serviço permanece com o estado de "iniciando" até a porta realmente responder. Depois disso, a porta é monitorada para detectar timeout, encerramento inesperado ou queda do serviço. A verificação considera listeners IPv4 e IPv6, evitando falsos alertas em ferramentas como o Vite no Windows.
+
+Quando algo falha, os logs são analisados para oferecer uma sugestão prática. Em vez de mostrar apenas que o processo parou, o LocalCodePilot pode indicar que há um conflito de porta, uma dependência ausente ou outro erro reconhecido.
+
+## O aplicativo se lembra do ambiente
+
+Outra parte importante desta atualização foi persistir o contexto entre sessões. O LocalCodePilot agora salva a tela selecionada, o projeto em foco, os favoritos e a ordem de uso recente.
+
+Também são preservados a porta escolhida, a URL encontrada, o resultado da última execução e os 200 logs mais recentes de cada serviço. Isso permite fechar o aplicativo, abri-lo novamente e consultar o que aconteceu sem perder o histórico imediato.
+
+A nova ação **Retomar ambiente** restaura esse contexto sem iniciar processos automaticamente. A escolha é intencional: o aplicativo se lembra do estado do trabalho, mas não executa comandos sem uma ação clara do usuário.
+
+## Atualizações sem interromper o trabalho
+
+A alpha também ganhou uma verificação diária de novas versões pelo GitHub Releases, incluindo versões de pré-lançamento. A consulta acontece em segundo plano e, quando há uma versão nova, o aviso oferece acesso às novidades, ao pacote oficial e à opção de lembrar depois.
+
+Por enquanto, a instalação continua manual, porque o executável ainda não possui assinatura digital. O pacote portátil para Windows e seu checksum SHA-256 foram atualizados para a nova versão, junto com a documentação de instalação e as notas do release.
+
+## O que esta etapa representa
+
+Portas, histórico e atualizações parecem recursos separados, mas resolvem o mesmo problema: reduzir a quantidade de contexto que o desenvolvedor precisa manter na cabeça. A ferramenta agora sabe onde um serviço deveria estar, confirma se ele realmente subiu, registra o que aconteceu e ajuda a continuar depois.
+
+O código da alpha `0.4.0` já está no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot). Como o projeto continua em alpha pública, o feedback sobre detecção de comandos, portas e comportamento no Windows é especialmente valioso.

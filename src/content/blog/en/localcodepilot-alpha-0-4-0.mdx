@@ -1,0 +1,44 @@
+---
+title: "LocalCodePilot alpha 0.4.0: ports, persistent context and updates"
+description: "How LocalCodePilot learned to detect port conflicts, monitor service health and restore development context."
+pubDate: 2026-10-06
+tags: [Rust, Open Source, Developer Tools]
+featured: true
+locale: en
+slug: en/localcodepilot-alpha-0-4-0
+translationKey: localcodepilot-alpha-0-4-0
+---
+
+Today LocalCodePilot took an important step beyond being a process launcher and toward becoming a more reliable companion for local development. Version `0.4.0-alpha.1` was prepared around three main areas: port management, persistent project context and update checks.
+
+The work changed 17 files and added more than 2,300 lines. That number shows the size of the update, but the practical result matters more: starting an environment, understanding what happened and continuing after reopening the application is now more predictable.
+
+## Ports are now part of the process lifecycle
+
+Before starting a service, LocalCodePilot now determines its expected port. It recognizes explicit ports in commands as well as common defaults: `5173` for Vite, `3000` for Next.js, React and Nuxt, `4321` for Astro, `8080` for Webpack and `8000` for Laravel and Django.
+
+If a port is occupied, the tool looks for the next available one and adjusts the command when it can do so safely. On Windows, it can also identify the name and PID of the process causing the conflict. Terminating that process remains an explicit user decision.
+
+The change goes beyond startup. A service stays in the "starting" state until its port is actually listening. LocalCodePilot then monitors the port to detect timeouts, unexpected exits and service loss. The check covers both IPv4 and IPv6 listeners, avoiding false warnings for tools such as Vite on Windows.
+
+When something fails, logs are inspected to provide a practical suggestion. Instead of only reporting that a process stopped, LocalCodePilot can point to a port conflict, a missing dependency or another recognized error.
+
+## The application remembers the environment
+
+Another important part of this update was preserving context between sessions. LocalCodePilot now saves the selected screen, focused project, favorites and recent-use ordering.
+
+It also keeps the selected port, detected URL, last result and the 200 most recent log lines for each service. You can close the application, open it again and inspect what happened without losing the immediate history.
+
+The new **Resume environment** action restores that context without starting processes automatically. This is intentional: the application remembers the state of the work, while commands still run only after a clear user action.
+
+## Updates without interrupting the work
+
+The alpha now checks GitHub Releases once a day for new versions, including prereleases. The request runs in the background and, when an update exists, the notice provides access to the release notes, official package and a remind-me-later option.
+
+Installation remains manual for now because the executable is not digitally signed yet. The portable Windows package and its SHA-256 checksum were prepared for the new version, along with updated installation documentation and release notes.
+
+## What this stage means
+
+Ports, history and updates may look like separate features, but they solve the same problem: reducing how much context developers need to keep in their heads. The tool now knows where a service should be, confirms that it started, records what happened and helps continue the work later.
+
+The alpha `0.4.0` code is available in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot). As the project remains in public alpha, feedback about command detection, ports and Windows behavior is especially useful.
