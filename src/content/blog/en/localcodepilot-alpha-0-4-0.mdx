@@ -1,7 +1,8 @@
 ---
 title: "LocalCodePilot alpha 0.4.0: ports, persistent context and updates"
-description: "How LocalCodePilot learned to detect port conflicts, monitor service health and restore development context."
+description: "Ports, persistent context, in-app updates, and container diagnostics across the 0.4.0 alpha series."
 pubDate: 2026-10-06
+updatedDate: 2026-10-13
 tags: [Rust, Open Source, Developer Tools]
 featured: true
 locale: en
@@ -9,9 +10,9 @@ slug: en/localcodepilot-alpha-0-4-0
 translationKey: localcodepilot-alpha-0-4-0
 ---
 
-Today LocalCodePilot took an important step beyond being a process launcher and toward becoming a more reliable companion for local development. Version `0.4.0-alpha.1` was prepared around three main areas: port management, persistent project context and update checks.
+LocalCodePilot took an important step beyond being a process launcher and toward becoming a more reliable companion for local development. The `0.4.0` series, now at `0.4.0-alpha.5`, brings together port management, persistent project context, in-app updates, and initial container diagnostics.
 
-The work changed 17 files and added more than 2,300 lines. That number shows the size of the update, but the practical result matters more: starting an environment, understanding what happened and continuing after reopening the application is now more predictable.
+The practical result matters most: starting an environment, understanding what happened, and continuing after reopening the application is now more predictable. At the same time, experimental features must state their limits clearly—especially Docker and Podman support.
 
 ## Ports are now part of the process lifecycle
 
@@ -31,14 +32,20 @@ It also keeps the selected port, detected URL, last result and the 200 most rece
 
 The new **Resume environment** action restores that context without starting processes automatically. This is intentional: the application remembers the state of the work, while commands still run only after a clear user action.
 
-## Updates without interrupting the work
+## Updates from the application
 
-The alpha now checks GitHub Releases once a day for new versions, including prereleases. The request runs in the background and, when an update exists, the notice provides access to the release notes, official package and a remind-me-later option.
+The alpha checks GitHub Releases once a day for new versions, including prereleases. The request runs in the background and can also be started from **Settings > Updates**.
 
-Installation remains manual for now because the executable is not digitally signed yet. The portable Windows package and its SHA-256 checksum were prepared for the new version, along with updated installation documentation and release notes.
+Starting with `0.4.0-alpha.5`, **Update now** downloads the official executable, verifies its SHA-256, closes LocalCodePilot, replaces the file, and opens the new version. A temporary helper replaces the executable in use and keeps a backup until the new startup is confirmed. If startup fails, the previous version is restored. Users on alpha 4 or older must install alpha 5 manually one last time. The executable is still unsigned.
+
+## Containers: identification and diagnostics, without execution yet
+
+The **Containers** page identifies Dockerfiles, Containerfiles, and Compose manifests. It can list declared services, images, builds, ports, and profiles, and check whether Docker or Podman and a Compose provider are available.
+
+This support is limited to diagnostics and previews. LocalCodePilot **does not install Docker or Podman, download images, or start, stop, follow logs, or monitor containers**. Displayed commands are proposals for review; the app does not execute them. Integrated execution will only be announced after it is implemented and validated with real engines.
 
 ## What this stage means
 
 Ports, history and updates may look like separate features, but they solve the same problem: reducing how much context developers need to keep in their heads. The tool now knows where a service should be, confirms that it started, records what happened and helps continue the work later.
 
-The alpha `0.4.0` code is available in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot). As the project remains in public alpha, feedback about command detection, ports and Windows behavior is especially useful.
+`0.4.0-alpha.5` is available on the [release page](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.5), and the source remains open in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot). As the project remains in public alpha, feedback about command detection, ports, updates, and container diagnostics is especially useful.
