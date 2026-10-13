@@ -1,7 +1,8 @@
 ---
 title: "LocalCodePilot alpha 0.4.0: portas, contexto persistente e atualizações"
-description: "Como o LocalCodePilot passou a detectar conflitos de porta, acompanhar a saúde dos serviços e retomar o contexto de trabalho."
+description: "Portas, contexto persistente, atualização pelo aplicativo e diagnóstico de containers na série alpha 0.4.0."
 pubDate: 2026-10-06
+updatedDate: 2026-10-13
 tags: [Rust, Open Source, Developer Tools]
 featured: true
 locale: pt-br
@@ -9,9 +10,9 @@ slug: pt-br/localcodepilot-alpha-0-4-0
 translationKey: localcodepilot-alpha-0-4-0
 ---
 
-Hoje o LocalCodePilot deu um passo importante para deixar de ser apenas um iniciador de processos e se tornar um companheiro mais confiável para o desenvolvimento local. A versão `0.4.0-alpha.1` foi preparada com três frentes principais: gerenciamento de portas, persistência do contexto dos projetos e verificação de atualizações.
+O LocalCodePilot deu um passo importante para deixar de ser apenas um iniciador de processos e se tornar um companheiro mais confiável para o desenvolvimento local. A série `0.4.0`, agora na `0.4.0-alpha.5`, reúne gerenciamento de portas, persistência do contexto dos projetos, atualização pelo próprio aplicativo e diagnóstico inicial de containers.
 
-Foram 17 arquivos alterados, com mais de 2.300 linhas adicionadas. O número ajuda a mostrar o tamanho da mudança, mas o resultado mais importante aparece no uso diário: iniciar um ambiente, entender o que aconteceu e continuar o trabalho depois de reabrir o aplicativo ficou mais previsível.
+O resultado mais importante aparece no uso diário: iniciar um ambiente, entender o que aconteceu e continuar o trabalho depois de reabrir o aplicativo ficou mais previsível. Ao mesmo tempo, os recursos ainda experimentais precisam mostrar seus limites com clareza — principalmente o suporte a Docker e Podman.
 
 ## Portas agora fazem parte do ciclo de vida
 
@@ -31,14 +32,20 @@ Também são preservados a porta escolhida, a URL encontrada, o resultado da úl
 
 A nova ação **Retomar ambiente** restaura esse contexto sem iniciar processos automaticamente. A escolha é intencional: o aplicativo se lembra do estado do trabalho, mas não executa comandos sem uma ação clara do usuário.
 
-## Atualizações sem interromper o trabalho
+## Atualizações pelo próprio aplicativo
 
-A alpha também ganhou uma verificação diária de novas versões pelo GitHub Releases, incluindo versões de pré-lançamento. A consulta acontece em segundo plano e, quando há uma versão nova, o aviso oferece acesso às novidades, ao pacote oficial e à opção de lembrar depois.
+A alpha verifica diariamente novas versões no GitHub Releases, incluindo pré-lançamentos. A consulta acontece em segundo plano e também pode ser iniciada em **Configurações > Atualizações**.
 
-Por enquanto, a instalação continua manual, porque o executável ainda não possui assinatura digital. O pacote portátil para Windows e seu checksum SHA-256 foram atualizados para a nova versão, junto com a documentação de instalação e as notas do release.
+A partir da `0.4.0-alpha.5`, o botão **Atualizar agora** baixa o executável oficial, confere o SHA-256, fecha o LocalCodePilot, substitui o arquivo e abre a nova versão. Um auxiliar temporário permite trocar o executável em uso e mantém um backup até a nova inicialização ser confirmada. Se ela falhar, a versão anterior é restaurada. Quem usa a alpha 4 ou uma versão anterior precisa instalar a alpha 5 manualmente uma última vez. O executável ainda não possui assinatura digital.
+
+## Containers: identificação e diagnóstico, ainda sem execução
+
+A aba **Containers** identifica Dockerfile, Containerfile e manifests Compose. Ela consegue listar serviços, imagens, builds, portas e perfis declarados, além de verificar se Docker ou Podman e o provedor Compose estão disponíveis.
+
+Esse suporte ainda é somente de diagnóstico e prévia. O LocalCodePilot **não instala Docker ou Podman, não baixa imagens e não inicia, interrompe, acompanha logs ou monitora containers**. Os comandos exibidos são propostas para revisão; não são executados pelo aplicativo. A integração de execução só será anunciada depois de implementada e validada com motores reais.
 
 ## O que esta etapa representa
 
 Portas, histórico e atualizações parecem recursos separados, mas resolvem o mesmo problema: reduzir a quantidade de contexto que o desenvolvedor precisa manter na cabeça. A ferramenta agora sabe onde um serviço deveria estar, confirma se ele realmente subiu, registra o que aconteceu e ajuda a continuar depois.
 
-O código da alpha `0.4.0` já está no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot). Como o projeto continua em alpha pública, o feedback sobre detecção de comandos, portas e comportamento no Windows é especialmente valioso.
+A `0.4.0-alpha.5` está disponível na [página da release](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.5), e o código continua aberto no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot). Como o projeto permanece em alpha pública, o feedback sobre detecção de comandos, portas, atualizações e diagnóstico de containers é especialmente valioso.
