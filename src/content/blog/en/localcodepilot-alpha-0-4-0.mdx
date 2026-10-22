@@ -1,8 +1,8 @@
 ---
-title: "LocalCodePilot alpha 0.4.0: ports, persistent context and updates"
-description: "Ports, persistent context, in-app updates, and container diagnostics across the 0.4.0 alpha series."
+title: "LocalCodePilot alpha 0.4.0: databases, containers, and a clearer experience"
+description: "Alpha 6 adds database diagnostics, HTTP health checks, confirmed container execution, built-in help, and an experimental macOS package."
 pubDate: 2026-10-06
-updatedDate: 2026-10-13
+updatedDate: 2026-10-21
 tags: [Rust, Open Source, Developer Tools]
 featured: true
 locale: en
@@ -10,42 +10,36 @@ slug: en/localcodepilot-alpha-0-4-0
 translationKey: localcodepilot-alpha-0-4-0
 ---
 
-LocalCodePilot took an important step beyond being a process launcher and toward becoming a more reliable companion for local development. The `0.4.0` series, now at `0.4.0-alpha.5`, brings together port management, persistent project context, in-app updates, and initial container diagnostics.
+LocalCodePilot has reached `0.4.0-alpha.6` with an important shift: beyond finding and starting projects, the application now explains environment state more clearly and brings together more tools for investigating local issues.
 
-The practical result matters most: starting an environment, understanding what happened, and continuing after reopening the application is now more predictable. At the same time, experimental features must state their limits clearly—especially Docker and Podman support.
+The release combines database diagnostics, HTTP health checks, confirmed container operations, faster startup, consistent cards, and a new help page. The goal remains to reduce the context developers must keep in their heads while switching between projects.
 
-## Ports are now part of the process lifecycle
+## Databases become part of diagnostics
 
-Before starting a service, LocalCodePilot now determines its expected port. It recognizes explicit ports in commands as well as common defaults: `5173` for Vite, `3000` for Next.js, React and Nuxt, `4321` for Astro, `8080` for Webpack and `8000` for Laravel and Django.
+Alpha 6 recognizes PostgreSQL, MySQL, MariaDB, SQL Server, and SQLite configuration in project environment files. For local servers, the application checks whether the address and port respond and provides guidance when the service is unavailable.
 
-If a port is occupied, the tool looks for the next available one and adjusts the command when it can do so safely. On Windows, it can also identify the name and PID of the process causing the conflict. Terminating that process remains an explicit user decision.
+Credentials are not displayed in the interface. The server remains under user management: LocalCodePilot reports its state but does not automatically install or start PostgreSQL, MySQL, SQL Server, or another provider.
 
-The change goes beyond startup. A service stays in the "starting" state until its port is actually listening. LocalCodePilot then monitors the port to detect timeouts, unexpected exits and service loss. The check covers both IPv4 and IPv6 listeners, avoiding false warnings for tools such as Vite on Windows.
+## HTTP health beyond an open port
 
-When something fails, logs are inspected to provide a practical suggestion. Instead of only reporting that a process stopped, LocalCodePilot can point to a port conflict, a missing dependency or another recognized error.
+An open port does not guarantee a healthy application. Local processes now receive asynchronous HTTP health checks with status code, response time, and timeout information.
 
-## The application remembers the environment
+The **Processes** page combines these signals with port state and logs. This helps distinguish a healthy application from a running process that returns an error or has stopped serving requests.
 
-Another important part of this update was preserving context between sessions. LocalCodePilot now saves the selected screen, focused project, favorites and recent-use ordering.
+## Containers with confirmation
 
-It also keeps the selected port, detected URL, last result and the 200 most recent log lines for each service. You can close the application, open it again and inspect what happened without losing the immediate history.
+The **Containers** page is no longer limited to diagnostics. With Docker or Podman already installed and running, LocalCodePilot can validate Compose files, start and stop environments, inspect status and logs, and build isolated Dockerfiles.
 
-The new **Resume environment** action restores that context without starting processes automatically. This is intentional: the application remembers the state of the work, while commands still run only after a clear user action.
+Before each operation, the application shows the command and working directory. The user must confirm it, and long operations can be cancelled or stopped by a timeout. The workflow was validated with Docker Desktop and Podman on Windows 11.
 
-## Updates from the application
+## A more predictable interface
 
-The alpha checks GitHub Releases once a day for new versions, including prereleases. The request runs in the background and can also be started from **Settings > Updates**.
+The saved catalog appears immediately at startup while discovery and diagnostics refresh in the background. Overview cards now use consistent height and action placement, reducing visual shifts between projects.
 
-Starting with `0.4.0-alpha.5`, **Update now** downloads the official executable, verifies its SHA-256, closes LocalCodePilot, replaces the file, and opens the new version. A temporary helper replaces the executable in use and keeps a backup until the new startup is confirmed. If startup fails, the previous version is restored. Users on alpha 4 or older must install alpha 5 manually one last time. The executable is still unsigned.
+The new **Help** page covers first use, displayed states, database and container guidance, and a short sequence for investigating failures. It is available directly from the sidebar.
 
-## Containers: identification and diagnostics, without execution yet
+## Windows focus and macOS testing
 
-The **Containers** page identifies Dockerfiles, Containerfiles, and Compose manifests. It can list declared services, images, builds, ports, and profiles, and check whether Docker or Podman and a Compose provider are available.
+Windows 10 and 11 x64 remain the primary target for this alpha. The release also includes an experimental universal DMG for Intel and Apple Silicon Macs, still using ad hoc signing without notarization. This package expands testing on real machines before stable macOS support is announced.
 
-This support is limited to diagnostics and previews. LocalCodePilot **does not install Docker or Podman, download images, or start, stop, follow logs, or monitor containers**. Displayed commands are proposals for review; the app does not execute them. Integrated execution will only be announced after it is implemented and validated with real engines.
-
-## What this stage means
-
-Ports, history and updates may look like separate features, but they solve the same problem: reducing how much context developers need to keep in their heads. The tool now knows where a service should be, confirms that it started, records what happened and helps continue the work later.
-
-`0.4.0-alpha.5` is available on the [release page](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.5), and the source remains open in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot). As the project remains in public alpha, feedback about command detection, ports, updates, and container diagnostics is especially useful.
+`0.4.0-alpha.6` is available on the [release page](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.6), with the Windows ZIP and executable, experimental macOS DMG, and SHA-256 hashes. The source remains open in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot).
