@@ -28,7 +28,7 @@ const sharedProjects = {
   localcodepilot: {
     title: 'LocalCodePilot',
     eyebrow: 'Open source · Developer tooling',
-    stack: ['Rust', 'egui', 'Processes', 'Desktop'],
+    stack: ['Rust', 'egui', 'Docker / Podman', 'HTTP', 'Desktop'],
     href: 'https://localcodepilot.com.br',
     repo: 'https://github.com/cjulio1993/LocalCodePilot',
     featured: true
@@ -92,7 +92,7 @@ export const copy: Record<Locale, any> = {
       ctaTitle: 'Have a hard problem worth solving?', ctaText: 'I am interested in remote software engineering roles, technical collaborations and useful products.', ctaButton: 'Start a conversation'
     },
     projects: [
-      { ...sharedProjects.localcodepilot, description: 'A desktop app that detects local projects, understands their stacks and starts development processes with status and logs in one place.', impact: 'Launched its first public version as an open-source product, with support for PHP, JavaScript, Python and Rust projects.' },
+      { ...sharedProjects.localcodepilot, description: 'A desktop app built in Rust that discovers local projects, recognizes WordPress, diagnoses runtimes and databases, and brings processes, logs, HTTP health checks and confirmed container operations together.', impact: 'Public alpha 7: Windows distribution, experimental universal macOS DMG, built-in help and updates matched to each operating system.' },
       { ...sharedProjects.banking, description: 'A resilient file-delivery workflow for banking integrations, designed with dispatcher/worker processing, retries and a dead-letter queue.', impact: 'Structured logs, correlation IDs and idempotency make failures traceable and safe to recover without duplicate processing.' },
       { ...sharedProjects.taskflow, description: 'A project and task management application built as a complete Laravel and Vue SPA, with a polished board experience.', impact: 'Sanctum authentication, authorization policies and 15 automated tests with 47 assertions.' },
       { ...sharedProjects.platform, description: 'REST and SOAP interfaces that modernize access to an enterprise platform while preserving compatibility with legacy clients.', impact: 'Incremental modernization with authentication, rate limits, contract documentation and production observability.' }
@@ -162,7 +162,7 @@ export const copy: Record<Locale, any> = {
       ctaTitle: 'Tem um problema difícil que vale resolver?', ctaText: 'Tenho interesse em posições remotas de engenharia, colaborações técnicas e produtos úteis.', ctaButton: 'Vamos conversar'
     },
     projects: [
-      { ...sharedProjects.localcodepilot, description: 'Aplicativo desktop que detecta projetos locais, entende suas stacks e inicia processos de desenvolvimento com status e logs em um só lugar.', impact: 'Primeira versão pública lançada como produto open source, com suporte a projetos PHP, JavaScript, Python e Rust.' },
+      { ...sharedProjects.localcodepilot, description: 'Aplicativo desktop em Rust que descobre projetos locais, reconhece WordPress, diagnostica runtimes e bancos e reúne processos, logs, saúde HTTP e operações confirmadas de containers.', impact: 'Alpha 7 pública: distribuição Windows, DMG universal experimental para macOS, ajuda integrada e atualizações compatíveis com cada sistema.' },
       { ...sharedProjects.banking, title: 'API de integração financeira', eyebrow: 'Produção · Integração financeira', description: 'Fluxo resiliente de entrega de arquivos para integrações bancárias, com processamento dispatcher/worker, retentativas e dead-letter queue.', impact: 'Logs estruturados, correlation IDs e idempotência tornam falhas rastreáveis e permitem recuperação segura, sem processamento duplicado.' },
       { ...sharedProjects.taskflow, description: 'Aplicação de gestão de projetos e tarefas construída como SPA completa em Laravel e Vue, com experiência refinada de quadro.', impact: 'Autenticação Sanctum, políticas de autorização e 15 testes automatizados com 47 asserções.' },
       { ...sharedProjects.platform, title: 'APIs de integração corporativa', eyebrow: 'Produção · Modernização de plataforma', description: 'Interfaces REST e SOAP que modernizam o acesso a uma plataforma corporativa sem abandonar clientes legados.', impact: 'Modernização gradual com autenticação, rate limiting, documentação de contratos e observabilidade em produção.' }
@@ -232,7 +232,7 @@ export const copy: Record<Locale, any> = {
       ctaTitle: '¿Tienes un problema difícil que vale la pena resolver?', ctaText: 'Me interesan roles remotos de ingeniería, colaboraciones técnicas y productos útiles.', ctaButton: 'Hablemos'
     },
     projects: [
-      { ...sharedProjects.localcodepilot, description: 'Aplicación de escritorio que detecta proyectos locales, entiende sus stacks e inicia procesos de desarrollo con estado y logs en un solo lugar.', impact: 'Primera versión pública lanzada como producto open source, compatible con proyectos PHP, JavaScript, Python y Rust.' },
+      { ...sharedProjects.localcodepilot, description: 'Aplicación de escritorio en Rust que descubre proyectos locales, reconoce WordPress, diagnostica runtimes y bases de datos y reúne procesos, logs, salud HTTP y operaciones confirmadas de containers.', impact: 'Alpha 7 pública: distribución Windows, DMG universal experimental para macOS, ayuda integrada y actualizaciones compatibles con cada sistema.' },
       { ...sharedProjects.banking, title: 'API de integración financiera', eyebrow: 'Producción · Integración financiera', description: 'Flujo resiliente de entrega de archivos para integraciones bancarias, con procesamiento dispatcher/worker, reintentos y dead-letter queue.', impact: 'Logs estructurados, correlation IDs e idempotencia permiten rastrear y recuperar fallos sin procesamiento duplicado.' },
       { ...sharedProjects.taskflow, description: 'Aplicación de gestión de proyectos y tareas construida como SPA completa con Laravel y Vue.', impact: 'Autenticación Sanctum, políticas de autorización y 15 pruebas automatizadas con 47 aserciones.' },
       { ...sharedProjects.platform, title: 'APIs de integración corporativa', eyebrow: 'Producción · Modernización de plataforma', description: 'Interfaces REST y SOAP que modernizan el acceso a una plataforma corporativa sin abandonar clientes heredados.', impact: 'Modernización gradual con autenticación, rate limiting, documentación de contratos y observabilidad.' }

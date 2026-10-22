@@ -1,8 +1,8 @@
 ---
-title: "LocalCodePilot alpha 0.4.0: bancos, containers e uma experiência mais clara"
-description: "A Alpha 6 adiciona diagnóstico de bancos, health checks HTTP, execução confirmada de containers, ajuda integrada e pacote experimental para macOS."
+title: "LocalCodePilot alpha 7: WordPress, containers reais e diagnóstico por projeto"
+description: "A alpha 7 reúne WordPress, containers Docker/Podman em Processos, navegação por projeto e cartões que distinguem serviço ativo de resposta HTTP saudável."
 pubDate: 2026-10-06
-updatedDate: 2026-10-21
+updatedDate: 2026-10-22
 tags: [Rust, Open Source, Developer Tools]
 featured: true
 locale: pt-br
@@ -10,36 +10,36 @@ slug: pt-br/localcodepilot-alpha-0-4-0
 translationKey: localcodepilot-alpha-0-4-0
 ---
 
-O LocalCodePilot chegou à `0.4.0-alpha.6` com uma mudança importante de direção: além de encontrar e iniciar projetos, o aplicativo agora explica melhor o estado do ambiente e reúne mais ferramentas para investigar problemas locais.
+O LocalCodePilot chegou à `0.4.0-alpha.7`. O projeto open source em Rust continua evoluindo de um catálogo de projetos locais para uma ferramenta que conecta descoberta, diagnóstico e execução em uma mesma interface desktop, com uma CLI sobre o mesmo núcleo.
 
-A versão combina diagnóstico de bancos de dados, health checks HTTP, operações confirmadas de containers, abertura mais rápida, cartões padronizados e uma nova página de ajuda. O foco continua sendo reduzir o contexto que o desenvolvedor precisa manter na cabeça ao alternar entre projetos.
+A alpha 6 trouxe diagnóstico de bancos, health checks HTTP, operações confirmadas de Compose e ajuda integrada. A alpha 7 organiza esses recursos em fluxos mais claros e adiciona reconhecimento de WordPress e visibilidade dos containers reais da máquina.
 
-## Bancos de dados entram no diagnóstico
+## WordPress com o ambiente certo
 
-A Alpha 6 reconhece configurações de PostgreSQL, MySQL, MariaDB, SQL Server e SQLite nos arquivos de ambiente do projeto. Para servidores locais, o aplicativo verifica se o endereço e a porta respondem e apresenta uma orientação quando o serviço está indisponível.
+O aplicativo reconhece WordPress pelos arquivos de configuração ou pelo Composer. A leitura do `DB_HOST` literal ajuda a diagnosticar o endereço do MySQL sem exibir credenciais. Quando o projeto usa Compose, a ação leva a **Containers**, onde PHP e banco podem ser iniciados juntos, em vez de abrir um servidor PHP local que não alcança o host do banco na rede do Compose.
 
-Credenciais não são exibidas na interface. O servidor continua sob gestão do usuário: o LocalCodePilot informa o estado, mas não instala nem inicia automaticamente PostgreSQL, MySQL, SQL Server ou outro provedor.
+O diagnóstico também reconhece PostgreSQL, MySQL, MariaDB, SQL Server e SQLite. Para bancos com servidor, a checagem confirma no máximo a disponibilidade da porta local: não valida usuário, senha ou a existência do banco. A instalação e a inicialização desses servidores continuam sob gestão do usuário.
 
-## Saúde HTTP além da porta aberta
+## Containers reais em Processos
 
-Uma porta aberta não garante que a aplicação esteja saudável. Por isso, os processos locais agora recebem health checks HTTP assíncronos com código de resposta, tempo de resposta e timeout.
+**Processos** agora lista containers Docker/Podman existentes, ativos ou parados, com estado, portas, logs e ações para iniciar, parar ou reiniciar. Portas web publicadas pelos containers e pelo Compose oferecem URLs candidatas para abrir no navegador.
 
-A tela **Processos** combina esses sinais com o estado da porta e os logs. Isso ajuda a distinguir uma aplicação saudável de um processo que está ativo, mas responde com erro ou deixou de atender requisições.
+A aba **Containers** permite validar arquivos Compose, iniciar e interromper ambientes, consultar estado e logs e construir imagens de Dockerfiles isolados. O aplicativo apresenta o comando e a pasta antes de cada operação para confirmação; operações longas têm cancelamento e timeout. Docker ou Podman e o provedor Compose precisam estar disponíveis: o app não instala nem inicia o motor.
 
-## Containers com confirmação
+## Do projeto ao próximo passo
 
-A aba **Containers** deixou de ser somente um diagnóstico. Com Docker ou Podman já instalado e em execução, o LocalCodePilot pode validar arquivos Compose, iniciar e interromper ambientes, consultar estado e logs e construir imagens de Dockerfiles isolados.
+Os cartões destacam a próxima ação e agrupam opções secundárias em **Mais ações**. Ao abrir **Processos** ou **Containers** pelo catálogo, a lista já vem filtrada pelo projeto selecionado, com opção de retornar à visão completa.
 
-Antes de cada operação, o aplicativo mostra o comando e a pasta de execução. O usuário precisa confirmar, e operações longas podem ser canceladas ou encerradas por timeout. O fluxo foi validado com Docker Desktop e Podman no Windows 11.
+Um serviço ativo e uma aplicação saudável são sinais diferentes. Os cartões separam o estado dos serviços da resposta HTTP confirmada; os health checks mostram código, tempo de resposta e falhas. Uma URL publicada por container é apenas candidata e não prova que o site esteja respondendo. HTTP e logs ajudam a investigar o que está acontecendo.
 
-## Uma interface mais previsível
+## Continuidade entre sessões e ajuda integrada
 
-O catálogo salvo aparece logo na abertura enquanto a descoberta e os diagnósticos são atualizados em segundo plano. Os cartões da visão geral agora usam altura e posição de ações consistentes, reduzindo mudanças visuais entre projetos.
+O catálogo salvo aparece na abertura enquanto descoberta e diagnósticos atualizam em segundo plano. Favoritos, projetos recentes e histórico dos serviços ajudam a retomar o contexto; processos não são reiniciados automaticamente. A página **Ajuda** explica primeiros passos, estados, bancos, containers e recuperação de falhas.
 
-A nova página **Ajuda** reúne o primeiro uso, os estados exibidos, orientações para bancos e containers e uma sequência curta para investigar falhas. Ela fica disponível diretamente na barra lateral.
+As atualizações respeitam o sistema em uso: Windows só recebe releases com pacote Windows, e macOS recebe o DMG compatível. No Windows, o atualizador confere SHA-256 e mantém um backup para recuperação se a nova versão não iniciar. No macOS, a substituição do aplicativo permanece manual.
 
-## Windows como foco e macOS para teste
+## Baixar e testar a alpha 7
 
-Windows 10 e 11 x64 continuam sendo o suporte principal desta alpha. A release também inclui um DMG universal experimental para Macs Intel e Apple Silicon, ainda com assinatura ad hoc e sem notarização. Esse pacote existe para ampliar os testes em máquinas reais antes de anunciar suporte estável no macOS.
+A [release 0.4.0-alpha.7](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.7) publica o ZIP e o executável Windows, o DMG universal experimental para Macs Intel e Apple Silicon e `SHA256SUMS.txt`. No Windows 10/11 x64, extraia o ZIP e execute `LocalCodePilot.exe`; o EXE separado serve à atualização integrada.
 
-A `0.4.0-alpha.6` está disponível na [página da release](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.6), com ZIP e executável para Windows, DMG experimental para macOS e hashes SHA-256. O código continua aberto no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).
+O pacote macOS usa assinatura ad hoc e não é notarizado. Os novos fluxos ainda precisam de validação interativa em Windows 10 e macOS. O projeto continua em alpha; código, documentação e instruções de contribuição estão no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).
