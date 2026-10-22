@@ -1,8 +1,8 @@
 ---
-title: "LocalCodePilot alpha 0.4.0: puertos, contexto persistente y actualizaciones"
-description: "Puertos, contexto persistente, actualizaciones desde la aplicación y diagnóstico de containers en la serie alpha 0.4.0."
+title: "LocalCodePilot alpha 0.4.0: bases de datos, containers y una experiencia más clara"
+description: "Alpha 6 añade diagnóstico de bases de datos, health checks HTTP, ejecución confirmada de containers, ayuda integrada y un paquete experimental para macOS."
 pubDate: 2026-10-06
-updatedDate: 2026-10-13
+updatedDate: 2026-10-21
 tags: [Rust, Open Source, Developer Tools]
 featured: true
 locale: es
@@ -10,42 +10,36 @@ slug: es/localcodepilot-alpha-0-4-0
 translationKey: localcodepilot-alpha-0-4-0
 ---
 
-LocalCodePilot dio un paso importante para dejar de ser solamente un iniciador de procesos y convertirse en un compañero más confiable para el desarrollo local. La serie `0.4.0`, ahora en `0.4.0-alpha.5`, reúne gestión de puertos, persistencia del contexto de los proyectos, actualizaciones desde la aplicación y diagnóstico inicial de containers.
+LocalCodePilot llegó a `0.4.0-alpha.6` con un cambio importante: además de encontrar e iniciar proyectos, la aplicación ahora explica mejor el estado del entorno y reúne más herramientas para investigar problemas locales.
 
-El resultado práctico es lo más importante: iniciar un entorno, entender qué ocurrió y continuar después de volver a abrir la aplicación ahora es más predecible. Al mismo tiempo, las funciones experimentales deben explicar sus límites con claridad, especialmente el soporte para Docker y Podman.
+La versión combina diagnóstico de bases de datos, health checks HTTP, operaciones confirmadas de containers, inicio más rápido, tarjetas consistentes y una nueva página de ayuda. El objetivo sigue siendo reducir el contexto que el desarrollador debe mantener en la cabeza al cambiar de proyecto.
 
-## Los puertos ahora forman parte del ciclo de vida
+## Las bases de datos forman parte del diagnóstico
 
-Antes de iniciar un servicio, LocalCodePilot ahora determina el puerto esperado. Reconoce puertos explícitos en los comandos y también los valores habituales: `5173` para Vite, `3000` para Next.js, React y Nuxt, `4321` para Astro, `8080` para Webpack y `8000` para Laravel y Django.
+Alpha 6 reconoce configuraciones de PostgreSQL, MySQL, MariaDB, SQL Server y SQLite en los archivos de entorno del proyecto. Para servidores locales, la aplicación comprueba si la dirección y el puerto responden y ofrece orientación cuando el servicio no está disponible.
 
-Si el puerto está ocupado, la herramienta busca el siguiente disponible y ajusta el comando cuando puede hacerlo de forma segura. En Windows también puede identificar el nombre y el PID del proceso que provoca el conflicto. Finalizar ese proceso sigue siendo una decisión explícita del usuario.
+Las credenciales no se muestran en la interfaz. El servidor permanece bajo gestión del usuario: LocalCodePilot informa su estado, pero no instala ni inicia automáticamente PostgreSQL, MySQL, SQL Server u otro proveedor.
 
-El cambio no termina al iniciar. El servicio permanece en estado "iniciando" hasta que el puerto realmente esté escuchando. Después, LocalCodePilot supervisa el puerto para detectar tiempos de espera, cierres inesperados o la caída del servicio. La comprobación incluye listeners IPv4 e IPv6, evitando falsos avisos con herramientas como Vite en Windows.
+## Salud HTTP más allá de un puerto abierto
 
-Cuando algo falla, los logs se analizan para ofrecer una sugerencia práctica. En lugar de informar solamente que el proceso terminó, LocalCodePilot puede señalar un conflicto de puerto, una dependencia ausente u otro error reconocido.
+Un puerto abierto no garantiza que la aplicación esté saludable. Los procesos locales ahora reciben health checks HTTP asíncronos con código de estado, tiempo de respuesta y timeout.
 
-## La aplicación recuerda el entorno
+La página **Procesos** combina estas señales con el estado del puerto y los logs. Esto ayuda a distinguir una aplicación saludable de un proceso activo que responde con error o dejó de atender solicitudes.
 
-Otra parte importante de esta actualización fue conservar el contexto entre sesiones. LocalCodePilot ahora guarda la pantalla seleccionada, el proyecto activo, los favoritos y el orden por uso reciente.
+## Containers con confirmación
 
-También conserva el puerto elegido, la URL detectada, el último resultado y las 200 líneas de log más recientes de cada servicio. Es posible cerrar la aplicación, abrirla de nuevo y consultar qué ocurrió sin perder el historial inmediato.
+La página **Containers** ya no se limita al diagnóstico. Con Docker o Podman instalado y en ejecución, LocalCodePilot puede validar archivos Compose, iniciar y detener entornos, consultar estado y logs y construir Dockerfiles aislados.
 
-La nueva acción **Reanudar entorno** recupera ese contexto sin iniciar procesos automáticamente. La decisión es intencional: la aplicación recuerda el estado del trabajo, pero los comandos solo se ejecutan después de una acción clara del usuario.
+Antes de cada operación, la aplicación muestra el comando y la carpeta de trabajo. El usuario debe confirmarlo, y las operaciones largas pueden cancelarse o finalizar por timeout. El flujo fue validado con Docker Desktop y Podman en Windows 11.
 
-## Actualizaciones desde la aplicación
+## Una interfaz más predecible
 
-La alpha comprueba una vez al día si existen nuevas versiones en GitHub Releases, incluidas las versiones preliminares. La consulta se ejecuta en segundo plano y también puede iniciarse desde **Configuración > Actualizaciones**.
+El catálogo guardado aparece al iniciar mientras el descubrimiento y los diagnósticos se actualizan en segundo plano. Las tarjetas de la vista general ahora mantienen una altura y una posición de acciones consistentes, reduciendo cambios visuales entre proyectos.
 
-A partir de `0.4.0-alpha.5`, **Actualizar ahora** descarga el ejecutable oficial, verifica su SHA-256, cierra LocalCodePilot, sustituye el archivo y abre la nueva versión. Un asistente temporal sustituye el ejecutable en uso y conserva una copia de seguridad hasta confirmar el nuevo inicio. Si falla, restaura la versión anterior. Quienes usan alpha 4 o una versión anterior deben instalar alpha 5 manualmente una última vez. El ejecutable aún no tiene firma digital.
+La nueva página **Ayuda** reúne el primer uso, los estados mostrados, orientación para bases de datos y containers y una secuencia breve para investigar fallos. Está disponible directamente en la barra lateral.
 
-## Containers: identificación y diagnóstico, todavía sin ejecución
+## Windows como foco y macOS para pruebas
 
-La sección **Containers** identifica Dockerfile, Containerfile y manifests de Compose. Puede listar servicios, imágenes, builds, puertos y perfiles declarados, además de comprobar si Docker o Podman y un proveedor de Compose están disponibles.
+Windows 10 y 11 x64 siguen siendo el objetivo principal de esta alpha. La versión también incluye un DMG universal experimental para Mac Intel y Apple Silicon, todavía con firma ad hoc y sin notarización. Este paquete amplía las pruebas en equipos reales antes de anunciar soporte estable para macOS.
 
-Este soporte se limita al diagnóstico y la vista previa. LocalCodePilot **no instala Docker o Podman, no descarga imágenes y no inicia, detiene, consulta logs ni supervisa containers**. Los comandos mostrados son propuestas para revisión; la aplicación no los ejecuta. La ejecución integrada solo se anunciará después de implementarla y validarla con motores reales.
-
-## Qué representa esta etapa
-
-Los puertos, el historial y las actualizaciones pueden parecer funciones separadas, pero resuelven el mismo problema: reducir la cantidad de contexto que el desarrollador necesita mantener en la cabeza. La herramienta ahora sabe dónde debería estar un servicio, confirma que se inició, registra lo ocurrido y ayuda a continuar el trabajo después.
-
-La `0.4.0-alpha.5` está disponible en la [página de la versión](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.5), y el código sigue abierto en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot). Como el proyecto continúa en alpha pública, los comentarios sobre detección de comandos, puertos, actualizaciones y diagnóstico de containers son especialmente útiles.
+`0.4.0-alpha.6` está disponible en la [página de la versión](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.6), con ZIP y ejecutable para Windows, DMG experimental para macOS y hashes SHA-256. El código sigue abierto en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).
