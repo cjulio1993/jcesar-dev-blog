@@ -27,7 +27,7 @@ const ptBr: SiteCopy = {
   },
   stats: [
     { value: '4+', label: 'anos em software' },
-    { value: '50', label: 'conexões simultâneas validadas em API' },
+    { value: '5.000+', label: 'requisições por minuto numa API financeira em produção' },
     { value: '15+', label: 'linguagens que o LocalCodePilot inicia' },
     { value: '1', label: 'produto open source lançado' }
   ],

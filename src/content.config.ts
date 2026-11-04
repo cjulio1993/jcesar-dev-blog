@@ -17,7 +17,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Drafts render in `npm run dev` (with a badge) and are excluded from builds. */
     draft: z.boolean().default(false),
-    /** Optional social image (path under /public). Falls back to /og-default.svg. */
+    /** Optional social image (PNG or JPG under /public; social networks do not show SVG). Falls back to /og-default.png. */
     heroImage: z.string().optional(),
     locale: z.enum(['en', 'pt-br', 'es']),
     /** Shared by the translations of the same article; drives the language switcher and hreflang. */

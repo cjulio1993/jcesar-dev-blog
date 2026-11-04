@@ -27,7 +27,7 @@ const en: SiteCopy = {
   },
   stats: [
     { value: '4+', label: 'years in software' },
-    { value: '50', label: 'simultaneous API connections validated' },
+    { value: '5,000+', label: 'requests per minute on a production financial API' },
     { value: '15+', label: 'languages LocalCodePilot starts' },
     { value: '1', label: 'open-source product launched' }
   ],
