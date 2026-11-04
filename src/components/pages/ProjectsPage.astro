@@ -1,29 +1,29 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
-import { copy } from '@/data/site';
+import { copy, SITE_URL } from '@/data/site';
 import { localizedPath, type Locale } from '@/i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = copy[locale];
-const canonical = `https://jcesar.dev.br${localizedPath(locale, 'projects')}`;
+const canonical = `${SITE_URL}${localizedPath(locale, 'projects')}`;
 ---
 <BaseLayout title={`${t.nav.projects} | Julio Cesar`} description={t.sections.workText} canonical={canonical}>
   <header class="page-hero container-shell" data-reveal><p class="eyebrow">{t.sections.workEyebrow}</p><h1>{t.sections.workTitle}</h1><p class="lead">{t.sections.workText}</p></header>
   <section class="section-compact container-shell">
-    <div class="project-filters" data-project-filters>
-      <button class="filter-button active" type="button" data-filter="all">{t.ui.all}</button>
-      <button class="filter-button" type="button" data-filter="featured">Open source / portfolio</button>
-      <button class="filter-button" type="button" data-filter="case-study">Case studies</button>
+    <div class="project-filters" role="group" data-project-filters>
+      <button class="chip" type="button" aria-pressed="true" data-filter="all">{t.ui.all}</button>
+      <button class="chip" type="button" aria-pressed="false" data-filter="featured">{t.ui.filterOpenSource}</button>
+      <button class="chip" type="button" aria-pressed="false" data-filter="case-study">{t.ui.filterCaseStudies}</button>
     </div>
-    <div class="project-grid" data-project-grid>{t.projects.map((project: any, index: number) => <ProjectCard project={project} index={index} locale={locale} />)}</div>
+    <div class="project-grid" data-project-grid>{t.projects.map((project, index) => <ProjectCard project={project} index={index} locale={locale} />)}</div>
   </section>
   <script>
     const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
     const cards = document.querySelectorAll<HTMLElement>('[data-project]');
     buttons.forEach((button) => button.addEventListener('click', () => {
       const filter = button.dataset.filter;
-      buttons.forEach((item) => item.classList.toggle('active', item === button));
+      buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
       cards.forEach((card) => {
         const visible = filter === 'all' || card.dataset.project === filter;
         card.hidden = !visible;

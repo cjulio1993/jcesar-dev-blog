@@ -1,6 +1,6 @@
 ---
 import { copy, socialLinks } from '@/data/site';
-import { localeFromPath, localizedPath } from '@/i18n';
+import { localeFromPath, localeMeta, localizedPath } from '@/i18n';
 
 const locale = localeFromPath(Astro.url.pathname);
 const t = copy[locale];
@@ -21,7 +21,7 @@ const t = copy[locale];
     <div class="footer-social">
       <a href={socialLinks.github} target="_blank" rel="noreferrer">GitHub ↗</a>
       <a href={socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
-      <a href={localizedPath(locale, 'rss.xml')}>RSS</a>
+      <a href={`${localeMeta[locale].prefix}/rss.xml`}>RSS</a>
     </div>
   </div>
   <div class="container-shell footer-bottom">

@@ -1,0 +1,64 @@
+/* Design tokens: the only place colors, fonts and radii are defined. */
+
+:root {
+  color-scheme: light;
+
+  --bg: #f7f7f7;
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-solid: #ffffff;
+  --surface-raised: #ededed;
+  --text: #171717;
+  --text-soft: #5c5c5c;
+  --line: rgba(0, 0, 0, 0.12);
+  --line-strong: rgba(0, 0, 0, 0.25);
+
+  /* Blue: interface accent. Green: "terminal" signals. */
+  --accent: #205cc6;
+  --accent-bright: #286adb;
+  --accent-soft: rgba(32, 92, 198, 0.08);
+  --accent-contrast: #ffffff;
+  --glow: rgba(32, 92, 198, 0.1);
+  --secondary: #168044;
+  --secondary-line: rgba(22, 128, 68, 0.35);
+  --secondary-glow: rgba(22, 128, 68, 0.055);
+  --warning: #9a5b00;
+  --warning-soft: rgba(196, 120, 0, 0.09);
+
+  --header: rgba(247, 247, 247, 0.9);
+  --shadow: 0 24px 70px rgba(23, 32, 18, 0.11);
+
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --radius: 6px;
+  --radius-sm: 5px;
+  --header-height: 74px;
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --bg: #0c0c0c;
+  --surface: rgba(23, 23, 23, 0.8);
+  --surface-solid: #171717;
+  --surface-raised: #222222;
+  --text: #f5f5f5;
+  --text-soft: #a3a3a3;
+  --line: rgba(255, 255, 255, 0.13);
+  --line-strong: rgba(255, 255, 255, 0.28);
+
+  --accent: #6c9fff;
+  --accent-bright: #95baff;
+  --accent-soft: rgba(108, 159, 255, 0.1);
+  --accent-contrast: #081326;
+  --glow: rgba(61, 120, 239, 0.12);
+  --secondary: #63e694;
+  --secondary-line: rgba(99, 230, 148, 0.4);
+  --secondary-glow: rgba(58, 203, 111, 0.075);
+  --warning: #f2b45a;
+  --warning-soft: rgba(242, 180, 90, 0.09);
+
+  --header: rgba(12, 12, 12, 0.9);
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+}

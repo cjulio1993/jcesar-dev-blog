@@ -1,24 +1,40 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import { copy } from '@/data/site';
-import { localeMeta, type Locale } from '@/i18n';
-import { postUrl } from '@/utils/blog';
+import { series } from '@/data/series';
+import { calculateReadingTime, formatPostDate, postUrl, type Post } from '@/utils/blog';
 
-interface Props { post: CollectionEntry<'blog'>; readingTime?: number; }
-const { post, readingTime } = Astro.props;
-const locale = post.data.locale as Locale;
+interface Props {
+  post: Post;
+  /** `lead` renders the large, two-column card used for the newest article. */
+  variant?: 'default' | 'lead';
+}
+const { post, variant = 'default' } = Astro.props;
+const { locale, title, description, tags, pubDate, draft } = post.data;
 const t = copy[locale];
+const readingTime = calculateReadingTime(post.body);
+const seriesTitle = post.data.series ? series[post.data.series].title[locale] : undefined;
+const searchText = [title, description, ...tags, seriesTitle ?? ''].join(' ');
+const visibleTags = tags.slice(0, variant === 'lead' ? 4 : 2);
 ---
 
-<article class="post-card" data-spotlight data-post-card data-search={`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')}`.toLowerCase()}>
-  <p class="post-meta">{post.data.pubDate.toLocaleDateString(localeMeta[locale].intl, { dateStyle: 'medium' })}</p>
-  <h3><a href={postUrl(post)}>{post.data.title}</a></h3>
-  <p>{post.data.description}</p>
+<article
+  class:list={['post-card', { 'post-card--lead': variant === 'lead' }]}
+  data-spotlight
+  data-post-card
+  data-search={searchText}
+  data-tags={JSON.stringify(tags)}
+>
+  <p class="post-meta">
+    <time datetime={pubDate.toISOString()}>{formatPostDate(pubDate, locale)}</time>
+    <span class="sep" aria-hidden="true">/</span>
+    <span>{readingTime} {t.ui.minRead}</span>
+    {draft && <span class="post-badge draft">{t.ui.draft}</span>}
+    {seriesTitle && <span class="post-badge">{seriesTitle}</span>}
+  </p>
+  <h3><a href={postUrl(post)}>{title}</a></h3>
+  <p class="post-description">{description}</p>
   <div class="post-footer">
-    <div class="tag-list">
-      {post.data.tags.slice(0, 2).map((tag) => <span class="tag">{tag}</span>)}
-      {readingTime && <span class="tag">{readingTime} {t.ui.minRead}</span>}
-    </div>
-    <span class="post-arrow" aria-hidden="true">↗</span>
+    <div class="tag-list">{visibleTags.map((tag) => <span class="tag">{tag}</span>)}</div>
+    {variant === 'lead' ? <span class="read-more" aria-hidden="true">{t.ui.read} →</span> : <span class="post-arrow" aria-hidden="true">↗</span>}
   </div>
 </article>

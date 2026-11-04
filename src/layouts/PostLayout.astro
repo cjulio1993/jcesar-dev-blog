@@ -1,37 +1,157 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
-import { copy } from '@/data/site';
-import { localeMeta, localizedPath, type Locale } from '@/i18n';
-import { cleanPostSlug, relatedPosts } from '@/utils/blog';
+import Table from '@/components/mdx/Table.astro';
+import Callout from '@/components/mdx/Callout.astro';
+import { copy, SITE_URL } from '@/data/site';
+import { series } from '@/data/series';
+import { localeMeta, localizedPath } from '@/i18n';
+import { calculateReadingTime, formatPostDate, postAlternates, postUrl, relatedPosts, seriesParts, type Post } from '@/utils/blog';
 
-interface Props { post: CollectionEntry<'blog'>; allPosts: CollectionEntry<'blog'>[]; readingTime: number; }
-const { post, allPosts, readingTime } = Astro.props;
-const locale = post.data.locale as Locale;
+interface Props { post: Post; allPosts: Post[]; }
+const { post, allPosts } = Astro.props;
+const { Content, headings } = await render(post);
+const { locale, title, description, pubDate, updatedDate, tags, heroImage, draft } = post.data;
 const t = copy[locale];
-const postCanonical = `https://jcesar.dev.br${localizedPath(locale, 'blog')}${cleanPostSlug(post)}/`;
-const related = relatedPosts(post, allPosts);
+const formatDate = (date: Date) => formatPostDate(date, locale, 'long');
+
+const canonical = `${SITE_URL}${postUrl(post)}`;
+const alternates = postAlternates(post, allPosts);
+const translations = Object.entries(alternates).filter(([item]) => item !== locale) as [keyof typeof localeMeta, string][];
+
+const parts = seriesParts(post, allPosts);
+const partIndex = parts.findIndex((item) => item.id === post.id);
+const seriesMeta = post.data.series ? series[post.data.series] : undefined;
+const previousPart = partIndex > 0 ? parts[partIndex - 1] : undefined;
+const nextPart = partIndex >= 0 && partIndex < parts.length - 1 ? parts[partIndex + 1] : undefined;
+
+const related = relatedPosts(post, allPosts, [previousPart, nextPart].filter((item): item is Post => Boolean(item)));
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
 const structuredData = {
-  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.data.title,
-  description: post.data.description, datePublished: post.data.pubDate,
-  dateModified: post.data.updatedDate ?? post.data.pubDate,
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
   inLanguage: localeMeta[locale].html,
-  author: { '@type': 'Person', name: 'Julio Cesar', url: 'https://jcesar.dev.br/about/' },
-  mainEntityOfPage: postCanonical
+  keywords: tags.join(', '),
+  author: { '@type': 'Person', name: 'Julio Cesar', url: `${SITE_URL}${localizedPath(locale, 'about')}` },
+  mainEntityOfPage: canonical,
+  ...(seriesMeta && { isPartOf: { '@type': 'CreativeWorkSeries', name: seriesMeta.title[locale] } })
 };
 ---
 
-<BaseLayout title={`${post.data.title} | Julio Cesar`} description={post.data.description} canonical={postCanonical} type="article" publishedTime={post.data.pubDate.toISOString()} modifiedTime={(post.data.updatedDate ?? post.data.pubDate).toISOString()} tags={post.data.tags} structuredData={structuredData}>
-  <article class="article-shell">
-    <a class="article-back" href={localizedPath(locale, 'blog')}>← {t.ui.backToBlog}</a>
-    <header class="article-header">
-      <p class="post-meta">{post.data.pubDate.toLocaleDateString(localeMeta[locale].intl, { dateStyle: 'long' })} · {readingTime} {t.ui.minRead}</p>
-      <h1>{post.data.title}</h1>
-      <p>{post.data.description}</p>
-      <div class="tag-list">{post.data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
-    </header>
-    <div class="article-body prose prose-zinc max-w-none dark:prose-invert"><slot /></div>
-  </article>
-  {related.length > 0 && <section class="container-shell section-compact"><p class="eyebrow">{t.blog.featured}</p><div class="post-grid">{related.map((item) => <PostCard post={item} />)}</div></section>}
+<BaseLayout
+  title={`${title} | Julio Cesar`}
+  description={description}
+  canonical={canonical}
+  type="article"
+  image={heroImage}
+  publishedTime={pubDate.toISOString()}
+  modifiedTime={(updatedDate ?? pubDate).toISOString()}
+  tags={tags}
+  alternates={alternates}
+  structuredData={structuredData}
+>
+  <div class="reading-progress" aria-hidden="true" data-reading-progress></div>
+
+  <div class="article-layout container-shell">
+    <article>
+      <a class="article-back" href={localizedPath(locale, 'blog')}>← {t.ui.backToBlog}</a>
+
+      <header class="article-header">
+        <p class="post-meta">
+          <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+          {updatedDate && <><span class="sep" aria-hidden="true">/</span><span>{t.ui.updated} <time datetime={updatedDate.toISOString()}>{formatDate(updatedDate)}</time></span></>}
+          <span class="sep" aria-hidden="true">/</span>
+          <span>{calculateReadingTime(post.body)} {t.ui.minRead}</span>
+          {draft && <span class="post-badge draft">{t.ui.draft}</span>}
+        </p>
+        <h1>{title}</h1>
+        <p class="article-lead">{description}</p>
+        <div class="tag-list">{tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+        {translations.length > 0 && (
+          <p class="article-translations">
+            {t.ui.readIn}:
+            {translations.map(([item, href]) => <a href={href} hreflang={localeMeta[item].html} lang={localeMeta[item].html} data-locale={item}>{localeMeta[item].label}</a>)}
+          </p>
+        )}
+      </header>
+
+      {seriesMeta && parts.length > 1 && (
+        <details class="series-box card" open>
+          <summary>
+            <strong>{seriesMeta.title[locale]}</strong>
+            <span>{t.ui.seriesPart} {partIndex + 1}/{parts.length}</span>
+          </summary>
+          <ol class="series-list">
+            {parts.map((part) => part.id === post.id
+              ? <li><span aria-current="page">{part.data.title}</span></li>
+              : <li><a href={postUrl(part)}>{part.data.title}</a></li>)}
+          </ol>
+        </details>
+      )}
+
+      <div class="article-body prose max-w-none" data-article-body>
+        <Content components={{ table: Table, Callout }} />
+      </div>
+
+      {(previousPart || nextPart) && (
+        <nav class="series-nav" aria-label={seriesMeta?.title[locale]}>
+          {previousPart && <a class="prev" href={postUrl(previousPart)}><small>← {t.ui.seriesPrev}</small><strong>{previousPart.data.title}</strong></a>}
+          {nextPart && <a class="next" href={postUrl(nextPart)}><small>{t.ui.seriesNext} →</small><strong>{nextPart.data.title}</strong></a>}
+        </nav>
+      )}
+    </article>
+
+    {toc.length > 1 && (
+      <aside class="article-toc" aria-label={t.ui.onThisPage}>
+        <p>{t.ui.onThisPage}</p>
+        <ol>
+          {toc.map((heading) => <li class={`depth-${heading.depth}`}><a href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a></li>)}
+        </ol>
+      </aside>
+    )}
+  </div>
+
+  {related.length > 0 && (
+    <section class="related-posts container-shell">
+      <p class="eyebrow">{t.ui.related}</p>
+      <div class="post-grid">{related.map((item) => <PostCard post={item} />)}</div>
+    </section>
+  )}
+
+  <script>
+    const progress = document.querySelector<HTMLElement>('[data-reading-progress]');
+    const body = document.querySelector<HTMLElement>('[data-article-body]');
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+
+    if (progress && body) {
+      let ticking = false;
+      const update = () => {
+        const rect = body.getBoundingClientRect();
+        const total = rect.height - window.innerHeight * 0.6;
+        const ratio = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
+        progress.style.setProperty('--progress', ratio.toFixed(3));
+        ticking = false;
+      };
+      window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+      update();
+    }
+
+    if (links.length) {
+      const targets = links
+        .map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+        .filter((element): element is HTMLElement => Boolean(element));
+      const setActive = (id: string) => links.forEach((link) => link.classList.toggle('active', link.dataset.tocLink === id));
+      const observer = new IntersectionObserver((entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      }, { rootMargin: '-80px 0px -65% 0px' });
+      targets.forEach((target) => observer.observe(target));
+    }
+  </script>
 </BaseLayout>

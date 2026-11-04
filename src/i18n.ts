@@ -24,3 +24,16 @@ export const switchLocalePath = (pathname: string, locale: Locale) => {
   return `${localeMeta[locale].prefix}${withoutLocale}` || '/';
 };
 
+
+/**
+ * Where each locale's version of the current page lives.
+ * Pages whose URLs differ per locale (blog posts) pass `alternates`;
+ * every other page shares its path across locales.
+ * Locales without a translation fall back to that locale's blog index in the switcher
+ * and are omitted from hreflang.
+ */
+export const pageAlternates = (pathname: string, alternates?: Partial<Record<Locale, string>>) =>
+  locales.map((locale) => {
+    const href = alternates ? alternates[locale] : switchLocalePath(pathname, locale);
+    return { locale, href, exists: Boolean(href), switchHref: href ?? localizedPath(locale, 'blog') };
+  });
