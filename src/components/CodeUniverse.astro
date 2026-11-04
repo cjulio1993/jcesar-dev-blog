@@ -1,8 +1,9 @@
 ---
+import { copy } from '@/data/site';
 import type { Locale } from '@/i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
-const label = locale === 'pt-br' ? 'Do código à realidade.' : locale === 'es' ? 'Del código a la realidad.' : 'From code to reality.';
+const label = copy[locale].hero.sceneLabel;
 ---
 <div class="code-universe" aria-label={label}>
   <div class="universe-topline"><span>JC / ENGINEERING LAB</span><span class="live-indicator">LIVE</span></div>

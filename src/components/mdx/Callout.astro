@@ -1,0 +1,18 @@
+---
+/**
+ * Highlighted note inside a post.
+ *
+ *   import Callout from '@/components/mdx/Callout.astro';
+ *   <Callout type="warning" title="Windows SmartScreen">…markdown…</Callout>
+ */
+interface Props {
+  type?: 'info' | 'warning' | 'tip';
+  title?: string;
+}
+const { type = 'info', title } = Astro.props;
+const icons = { info: 'i', warning: '!', tip: '✓' };
+---
+<aside class:list={['callout', `callout--${type}`]} role={type === 'warning' ? 'note' : undefined}>
+  {title && <p class="callout-title"><span aria-hidden="true">[{icons[type]}]</span>{title}</p>}
+  <slot />
+</aside>

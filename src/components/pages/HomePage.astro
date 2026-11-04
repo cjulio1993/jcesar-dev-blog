@@ -1,20 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import TechGrid from '@/components/TechGrid.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import PostCard from '@/components/PostCard.astro';
 import CodeUniverse from '@/components/CodeUniverse.astro';
-import { copy, socialLinks } from '@/data/site';
+import { copy, SITE_URL, socialLinks } from '@/data/site';
 import { localizedPath, type Locale } from '@/i18n';
-import { calculateReadingTime, postsForLocale } from '@/utils/blog';
+import { getPosts, postsForLocale } from '@/utils/blog';
 
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = copy[locale];
-const posts = postsForLocale(await getCollection('blog'), locale).slice(0, 3);
-const featuredProjects = t.projects.filter((project: any) => project.featured).slice(0, 3);
-const canonical = `https://jcesar.dev.br${localizedPath(locale)}`;
+const posts = postsForLocale(await getPosts(), locale).filter((post) => !post.data.draft).slice(0, 3);
+const featuredProjects = t.projects.filter((project) => project.featured).slice(0, 3);
+const canonical = `${SITE_URL}${localizedPath(locale)}`;
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -49,7 +48,7 @@ const structuredData = {
 
   <section class="container-shell" aria-label="Career highlights">
     <div class="stats-grid">
-      {t.stats.map((stat: any) => <div class="stat" data-reveal><span class="stat-value">{stat.value}</span><span class="stat-label">{stat.label}</span></div>)}
+      {t.stats.map((stat) => <div class="stat" data-reveal><span class="stat-value">{stat.value}</span><span class="stat-label">{stat.label}</span></div>)}
     </div>
   </section>
 
@@ -67,13 +66,13 @@ const structuredData = {
       <div><p class="eyebrow">{t.sections.workEyebrow}</p><h2 class="section-heading">{t.sections.workTitle}</h2><p class="section-intro">{t.sections.workText}</p></div>
       <a class="button button-secondary" href={localizedPath(locale, 'projects')}>{t.ui.viewAll}<span class="button-arrow">→</span></a>
     </div>
-    <div class="project-grid">{featuredProjects.map((project: any, index: number) => <ProjectCard project={project} index={index} locale={locale} />)}</div>
+    <div class="project-grid">{featuredProjects.map((project, index) => <ProjectCard project={project} index={index} locale={locale} />)}</div>
   </section>
 
   <section class="section container-shell">
     <div data-reveal><p class="eyebrow">{t.sections.experienceEyebrow}</p><h2 class="section-heading">{t.sections.experienceTitle}</h2></div>
     <div class="timeline">
-      {t.experience.map((item: any) => <article class="timeline-item" data-reveal><p class="timeline-period">{item.period}</p><div class="timeline-content"><h3>{item.role}</h3><p class="timeline-company">{item.company}</p><p>{item.text}</p></div></article>)}
+      {t.experience.map((item) => <article class="timeline-item" data-reveal><p class="timeline-period">{item.period}</p><div class="timeline-content"><h3>{item.role}</h3><p class="timeline-company">{item.company}</p><p>{item.text}</p></div></article>)}
     </div>
   </section>
 
@@ -82,7 +81,7 @@ const structuredData = {
       <div><p class="eyebrow">{t.sections.writingEyebrow}</p><h2 class="section-heading">{t.sections.writingTitle}</h2><p class="section-intro">{t.sections.writingText}</p></div>
       <a class="button button-secondary" href={localizedPath(locale, 'blog')}>{t.ui.viewAll}<span class="button-arrow">→</span></a>
     </div>
-    <div class="post-grid">{posts.map((post) => <PostCard post={post} readingTime={calculateReadingTime(post.body)} />)}</div>
+    <div class="post-grid">{posts.map((post) => <PostCard post={post} />)}</div>
   </section>}
 
   <section class="section container-shell">

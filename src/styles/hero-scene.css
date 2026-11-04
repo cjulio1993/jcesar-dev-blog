@@ -1,0 +1,65 @@
+/* Animated "engineering lab" scene beside the home hero (CodeUniverse.astro). */
+
+.code-universe { position: relative; width: 100%; min-width: 0; }
+.universe-topline { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--line); color: var(--text-soft); font: 0.58rem var(--font-mono); letter-spacing: 0.12em; }
+.live-indicator { color: var(--secondary); }
+.live-indicator::before { content: ''; display: inline-block; width: 5px; height: 5px; margin-right: 6px; border-radius: 50%; background: var(--secondary); box-shadow: 0 0 12px var(--secondary); animation: pulse 2s infinite; }
+
+.orbital-scene { position: relative; height: 370px; display: grid; place-items: center; isolation: isolate; overflow: hidden; }
+.orbital-grid { position: absolute; inset: 50% -30% -40%; background-image: linear-gradient(var(--line-strong) 1px, transparent 1px), linear-gradient(90deg, var(--line-strong) 1px, transparent 1px); background-size: 30px 30px; transform: perspective(240px) rotateX(55deg); mask-image: radial-gradient(ellipse, black, transparent 70%); animation: grid-flow 6s linear infinite; }
+.orbit { position: absolute; width: 290px; height: 290px; border: 1px solid var(--line-strong); border-radius: 50%; }
+.orbit-one { animation: orbit-turn 16s linear infinite; }
+.orbit-two { width: 340px; height: 170px; transform: rotate(-35deg); animation: orbit-tilt 12s linear infinite; border-color: var(--secondary-line); }
+.orbit-three { width: 170px; height: 340px; transform: rotate(-30deg); animation: orbit-tilt 20s linear infinite reverse; }
+.orbit-node { position: absolute; width: 7px; height: 7px; left: 50%; top: -4px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 18px 3px var(--glow); }
+.orbit-two .orbit-node { background: var(--secondary); box-shadow: 0 0 18px var(--secondary-glow); }
+.code-core { display: grid; place-content: center; gap: 14px; width: 170px; height: 170px; border: 1px solid var(--line-strong); border-radius: 28%; background: radial-gradient(circle, var(--surface-raised), var(--bg)); box-shadow: 0 0 45px var(--secondary-glow); transform: rotate(-8deg); animation: core-float 6s ease-in-out infinite; text-align: center; }
+.code-core > span { color: var(--secondary); font: 500 4.5rem/1 var(--font-mono); text-shadow: 0 0 20px var(--secondary-glow); }
+.code-core small { color: var(--text-soft); font: 0.45rem var(--font-mono); letter-spacing: 0.12em; }
+.floating-code { position: absolute; padding: 0.65rem 0.8rem; border: 1px solid var(--line-strong); background: var(--surface-solid); color: var(--secondary); font: 0.62rem var(--font-mono); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); animation: tag-float 5s ease-in-out infinite; }
+.code-php { top: 54px; left: 4%; }
+.code-api { right: 0; top: 170px; animation-delay: -2s; }
+.code-rust { bottom: 48px; left: 9%; animation-delay: -3s; }
+.scene-coordinate { position: absolute; bottom: 10px; right: 0; color: var(--text-soft); font: 0.5rem var(--font-mono); letter-spacing: 0.1em; }
+
+.lab-terminal { overflow: hidden; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface-solid); box-shadow: 0 24px 65px rgba(0, 0, 0, 0.18); }
+.terminal-bar { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; border-bottom: 1px solid var(--line); color: var(--text-soft); font: 0.6rem var(--font-mono); }
+.code-dots { display: flex; gap: 0.35rem; }
+.code-dots span { width: 0.45rem; height: 0.45rem; border-radius: 50%; }
+.code-dots span:first-child { background: var(--accent); }
+.code-dots span:nth-child(2) { background: #858585; }
+.code-dots span:last-child { background: var(--secondary); }
+.terminal-body { padding: 0.85rem 1rem; font: 0.65rem/1.8 var(--font-mono); }
+.terminal-body p { margin: 0.2rem 0; overflow-wrap: anywhere; }
+.terminal-prompt, .terminal-cursor { color: var(--secondary); }
+.terminal-cursor { animation: cursor-blink 1s steps(1) infinite; }
+.terminal-output { color: var(--text-soft); }
+.terminal-status { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.55rem 1rem; background: var(--secondary-glow); color: var(--secondary); font: 0.48rem var(--font-mono); letter-spacing: 0.06em; }
+.terminal-status i { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--secondary); vertical-align: middle; }
+
+@keyframes orbit-turn { to { transform: rotate(360deg); } }
+@keyframes orbit-tilt { from { transform: rotate(-35deg); } to { transform: rotate(325deg); } }
+@keyframes core-float { 50% { transform: translateY(-12px) rotate(5deg); } }
+@keyframes tag-float { 50% { transform: translateY(-9px); } }
+@keyframes grid-flow { to { background-position: 0 30px; } }
+
+@media (max-width: 900px) {
+  .code-universe { max-width: 550px; margin-inline: auto; }
+}
+
+@media (max-width: 640px) {
+  .orbital-scene { height: 320px; }
+  .orbit-one { width: 240px; height: 240px; }
+  .orbit-two { width: 290px; height: 145px; }
+  .orbit-three { width: 145px; height: 290px; }
+  .code-core { width: 140px; height: 140px; }
+  .code-core > span { font-size: 3.5rem; }
+  .floating-code { padding: 0.5rem; font-size: 0.52rem; }
+  .code-php { left: 0; top: 38px; }
+  .code-api { top: 160px; }
+  .code-rust { left: 0; bottom: 35px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-universe * { animation: none !important; }
+}

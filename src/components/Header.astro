@@ -1,10 +1,13 @@
 ---
 import { copy } from '@/data/site';
-import { localeFromPath, localeMeta, locales, localizedPath, switchLocalePath } from '@/i18n';
+import { localeFromPath, localeMeta, localizedPath, pageAlternates, type Locale } from '@/i18n';
+
+interface Props { alternates?: Partial<Record<Locale, string>>; }
 
 const path = Astro.url.pathname;
 const locale = localeFromPath(path);
 const t = copy[locale];
+const languages = pageAlternates(path, Astro.props.alternates);
 const navItems = [
   { href: localizedPath(locale), label: t.nav.home, match: path === localizedPath(locale) },
   { href: localizedPath(locale, 'projects'), label: t.nav.projects, match: path.includes('/projects') },
@@ -30,8 +33,8 @@ const navItems = [
 
     <div class="header-actions">
       <div class="language-switcher" aria-label={t.ui.language}>
-        {locales.map((item) => (
-          <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchLocalePath(path, item)} lang={localeMeta[item].html}>{localeMeta[item].short}</a>
+        {languages.map(({ locale: item, switchHref }) => (
+          <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchHref} hreflang={localeMeta[item].html} lang={localeMeta[item].html}>{localeMeta[item].short}</a>
         ))}
       </div>
       <button id="theme-toggle" class="icon-button" type="button" aria-label={t.ui.theme} title={t.ui.theme}>
@@ -46,7 +49,7 @@ const navItems = [
     <div class="container-shell mobile-nav-inner">
       {navItems.map((item) => <a class:list={['mobile-nav-link', { active: item.match }]} href={item.href}>{item.label}</a>)}
       <div class="mobile-languages">
-        {locales.map((item) => <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchLocalePath(path, item)}>{localeMeta[item].label}</a>)}
+        {languages.map(({ locale: item, switchHref }) => <a class:list={['language-option', { active: item === locale }]} data-locale={item} href={switchHref} hreflang={localeMeta[item].html} lang={localeMeta[item].html}>{localeMeta[item].label}</a>)}
       </div>
     </div>
   </nav>
@@ -62,7 +65,6 @@ const navItems = [
   const themeButton = document.querySelector<HTMLButtonElement>('#theme-toggle');
   const mobileButton = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
   const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]');
-  const header = document.querySelector<HTMLElement>('[data-header]');
 
   themeButton?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
@@ -75,7 +77,4 @@ const navItems = [
     mobileButton.setAttribute('aria-expanded', String(isOpen));
   });
 
-  const updateHeader = () => header?.classList.toggle('scrolled', window.scrollY > 16);
-  updateHeader();
-  window.addEventListener('scroll', updateHeader, { passive: true });
 </script>

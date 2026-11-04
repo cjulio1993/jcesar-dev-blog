@@ -1,40 +1,100 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PostCard from '@/components/PostCard.astro';
-import { copy } from '@/data/site';
-import { localizedPath, type Locale } from '@/i18n';
-import { calculateReadingTime, postsForLocale } from '@/utils/blog';
+import { copy, SITE_URL } from '@/data/site';
+import { series, type SeriesId } from '@/data/series';
+import { localeMeta, localizedPath, type Locale } from '@/i18n';
+import { getPosts, postsForLocale, postUrl, uniqueTags } from '@/utils/blog';
+
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const t = copy[locale];
-const posts = postsForLocale(await getCollection('blog'), locale);
-const canonical = `https://jcesar.dev.br${localizedPath(locale, 'blog')}`;
+const posts = postsForLocale(await getPosts(), locale);
+const tags = uniqueTags(posts);
+const canonical = `${SITE_URL}${localizedPath(locale, 'blog')}`;
+const rssHref = `${localeMeta[locale].prefix}/rss.xml`;
+
+// One banner per series that has at least one post in this locale.
+const seriesBanners = (Object.keys(series) as SeriesId[])
+  .map((id) => ({
+    id,
+    meta: series[id],
+    parts: posts.filter((post) => post.data.series === id).reverse()
+  }))
+  .filter((item) => item.parts.length > 0);
 ---
 <BaseLayout title={`${t.nav.blog} | Julio Cesar`} description={t.blog.text} canonical={canonical}>
-  <header class="page-hero container-shell" data-reveal><p class="eyebrow">{t.nav.blog}</p><h1>{t.blog.title}</h1><p class="lead">{t.blog.text}</p></header>
+  <header class="page-hero container-shell" data-reveal>
+    <p class="eyebrow">{t.nav.blog}</p>
+    <h1>{t.blog.title}</h1>
+    <p class="lead">{t.blog.text}</p>
+    <div class="blog-hero-actions">
+      <span>{posts.length} {t.ui.articles}</span>
+      <a href={rssHref}>RSS ↗ <span class="sr-only">{t.blog.rss}</span></a>
+    </div>
+  </header>
+
   <section class="section-compact container-shell">
-    <div class="blog-tools"><input class="search-field" type="search" placeholder={t.ui.search} aria-label={t.ui.search} data-blog-search /><p class="search-count" data-search-count>{posts.length}</p></div>
-    <div class="post-grid" data-blog-grid>{posts.map((post) => <PostCard post={post} readingTime={calculateReadingTime(post.body)} />)}</div>
-    <p class="content-card" data-empty-state hidden>{t.ui.noResults}</p>
+    {seriesBanners.map(({ meta, parts }) => (
+      <aside class="series-banner card" data-reveal>
+        <div>
+          <p class="eyebrow">{t.blog.seriesEyebrow} · {parts.length} {t.ui.articles}</p>
+          <h2>{meta.title[locale]}</h2>
+          <p>{meta.description[locale]}</p>
+          {meta.href && <a class="series-link" href={meta.href} target="_blank" rel="noreferrer">{meta.href.replace('https://', '')} ↗</a>}
+        </div>
+        <ol class="series-list">
+          {parts.map((part) => <li><a href={postUrl(part)}>{part.data.title}</a></li>)}
+        </ol>
+      </aside>
+    ))}
+
+    <div class="blog-tools">
+      <div class="search-row">
+        <input class="search-field" type="search" placeholder={t.ui.search} aria-label={t.ui.search} data-blog-search />
+        <p class="search-count" aria-live="polite"><span data-search-count>{posts.length}</span> {t.ui.articles}</p>
+      </div>
+      {tags.length > 1 && (
+        <div class="topic-filters" role="group" aria-label={t.ui.allTopics}>
+          <button class="chip" type="button" aria-pressed="true" data-topic="">{t.ui.allTopics}</button>
+          {tags.map((tag) => <button class="chip" type="button" aria-pressed="false" data-topic={tag}>{tag}</button>)}
+        </div>
+      )}
+    </div>
+
+    <div class="post-grid" data-blog-grid>
+      {posts.map((post, index) => <PostCard post={post} variant={index === 0 ? 'lead' : 'default'} />)}
+    </div>
+    <p class="empty-state" data-empty-state hidden>{t.ui.noResults}</p>
   </section>
+
   <script>
     const input = document.querySelector<HTMLInputElement>('[data-blog-search]');
+    const topicButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-topic]'));
     const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-post-card]'));
     const count = document.querySelector<HTMLElement>('[data-search-count]');
     const empty = document.querySelector<HTMLElement>('[data-empty-state]');
-    const normalize = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-    input?.addEventListener('input', () => {
-      const query = normalize(input.value);
+    const normalize = (value: string) => value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+    let topic = '';
+
+    const apply = () => {
+      const query = normalize(input?.value ?? '');
       let visible = 0;
       cards.forEach((card) => {
-        const match = !query || normalize(card.dataset.search ?? '').includes(query);
+        const tags: string[] = JSON.parse(card.dataset.tags ?? '[]');
+        const match = (!query || normalize(card.dataset.search ?? '').includes(query)) && (!topic || tags.includes(topic));
         card.hidden = !match;
         if (match) visible += 1;
       });
       if (count) count.textContent = String(visible);
       if (empty) empty.hidden = visible !== 0;
-    });
+    };
+
+    input?.addEventListener('input', apply);
+    topicButtons.forEach((button) => button.addEventListener('click', () => {
+      topic = button.dataset.topic ?? '';
+      topicButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      apply();
+    }));
   </script>
 </BaseLayout>
-
