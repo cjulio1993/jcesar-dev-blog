@@ -28,7 +28,7 @@ const en: SiteCopy = {
   stats: [
     { value: '4+', label: 'years in software' },
     { value: '50', label: 'simultaneous API connections validated' },
-    { value: '3', label: 'languages on this site' },
+    { value: '15+', label: 'languages LocalCodePilot starts' },
     { value: '1', label: 'open-source product launched' }
   ],
   sections: {
@@ -42,7 +42,7 @@ const en: SiteCopy = {
     ctaTitle: 'Have a hard problem worth solving?', ctaText: 'I am interested in remote software engineering roles, technical collaborations and useful products.', ctaButton: 'Start a conversation'
   },
   projects: [
-    { ...sharedProjects.localcodepilot, description: 'A desktop app built in Rust that discovers local projects, recognizes WordPress, diagnoses runtimes and databases, and brings processes, logs, HTTP health checks and confirmed container operations together.', impact: 'Public alpha 7: Windows distribution, experimental universal macOS DMG, built-in help and updates matched to each operating system.' },
+    { ...sharedProjects.localcodepilot, description: 'Open-source desktop app in Rust: click Start and your project is up. It recognizes projects in more than 15 languages, prepares dependencies and even installs the missing language, with processes, ports, logs and containers in one place.', impact: 'Public Alpha 8: Windows installer, automatic start validated end to end on Windows 11, and environment setup through winget.' },
     { ...sharedProjects.banking, description: 'A resilient file-delivery workflow for banking integrations, designed with dispatcher/worker processing, retries and a dead-letter queue.', impact: 'Structured logs, correlation IDs and idempotency make failures traceable and safe to recover without duplicate processing.' },
     { ...sharedProjects.taskflow, description: 'A project and task management application built as a complete Laravel and Vue SPA, with a polished board experience.', impact: 'Sanctum authentication, authorization policies and 15 automated tests with 47 assertions.' },
     { ...sharedProjects.platform, description: 'REST and SOAP interfaces that modernize access to an enterprise platform while preserving compatibility with legacy clients.', impact: 'Incremental modernization with authentication, rate limits, contract documentation and production observability.' }

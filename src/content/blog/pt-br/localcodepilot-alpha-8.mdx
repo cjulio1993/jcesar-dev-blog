@@ -1,0 +1,68 @@
+---
+title: "LocalCodePilot alpha 8: clique em Iniciar e o projeto sobe"
+description: "A alpha 8 inicia projetos de mais de 15 linguagens sem pedir comando, instala a linguagem que falta e chega ao Windows com instalador."
+pubDate: 2026-11-04
+tags: [Rust, Open Source, Developer Tools]
+locale: pt-br
+translationKey: localcodepilot-alpha-8
+series: localcodepilot
+---
+
+Abrir um projeto e ficar digitando comandos é exatamente o que o LocalCodePilot quer eliminar. A `0.4.0-alpha.8` foi construída em torno de uma regra simples: **clicar em Iniciar tem que iniciar o projeto.** Se o app reconhece a linguagem, ele não deveria pedir para você escrever o comando.
+
+## Mais linguagens que iniciam sozinhas
+
+Além de Node.js, PHP, Python, Java, Go, Rust, Dart e Flutter, agora iniciam sem pedir comando:
+
+| Projeto | O app inicia com |
+| --- | --- |
+| .NET (ASP.NET, Blazor, console, soluções `.sln`) | `dotnet run` |
+| Ruby (Rails, Rack, Sinatra) | `bin/rails server`, `rackup` ou `ruby app.rb` |
+| Deno | as tarefas do `deno.json` |
+| Kotlin (Ktor, Spring Boot) | o Gradle do projeto |
+| Elixir (Phoenix) | `mix phx.server` |
+| Swift | `swift run` |
+| Scala (sbt) | `sbt run` |
+| Clojure (`deps.edn`) | `bb clojure -M:run` |
+| Haskell (Stack) | `stack run` |
+| Zig | `zig build run` |
+
+Projetos sem framework também entram: um `Main.java`, uma pasta de páginas PHP ou um site HTML iniciam do jeito mais simples que os arquivos permitem.
+
+## Quando falta a linguagem, o app instala
+
+O teste mais exigente da alpha 8 foi começar **sem** a linguagem no computador. Num projeto Haskell, por exemplo, o fluxo foi este:
+
+1. O cartão mostrou "Instale Haskell" e o botão **Preparar ambiente**.
+2. O app instalou o Stack pelo winget, depois da confirmação.
+3. **Instalar dependências** baixou o compilador GHC e compilou o projeto.
+4. **Iniciar** rodou o programa.
+
+O mesmo fluxo foi validado com Clojure (pelo Babashka) e Zig.
+
+O Haskell trouxe um caso real: o compilador não funciona quando a pasta do usuário tem espaço, como `C:\Users\Julio Cesar`, algo comum para quem tem nome composto. O app agora detecta isso e usa uma pasta sem espaço para as ferramentas do Haskell.
+
+<Callout type="info">
+Instalar uma linguagem sempre passa pela sua confirmação: o app mostra o plano (pacote, versão e origem) antes de executar qualquer coisa.
+</Callout>
+
+## Detalhes que fazem diferença no dia a dia
+
+- **Tentar de novo.** Depois de uma falha, como uma porta ocupada ou um programa que fechou, o cartão diz o motivo e oferece um botão para tentar outra vez.
+- **Porta ocupada de verdade.** No Windows, um servidor que escuta em `0.0.0.0` podia dividir a porta com outro programa sem ninguém perceber. Agora o app identifica o outro programa e avisa.
+- **Containers mais seguros.** O Podman foi validado de ponta a ponta. Quando dois projetos usam o mesmo nome de ambiente Compose, **Parar containers do outro projeto** para só os containers listados, sem apagar dados.
+- **Abrir no VS Code** não cai mais no modo restrito.
+
+## Baixar
+
+A [release 0.4.0-alpha.8](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.8) traz, pela primeira vez, um **instalador para Windows** (`.exe`), ao lado do ZIP portátil, do DMG universal experimental para macOS e do `SHA256SUMS.txt`.
+
+Os arquivos desta versão ainda não têm assinatura digital. Se o Windows mostrar "O Windows protegeu o computador", clique em **Mais informações** e depois em **Executar assim mesmo**. A assinatura está a caminho.
+
+## Limitações honestas
+
+- **Validação:** cada linguagem foi validada de ponta a ponta no Windows 11. O pacote para macOS continua experimental.
+- **Bancos de dados:** projetos que precisam de banco, como Rails com `db:prepare` e Phoenix com Ecto, ainda pedem esse passo manual.
+- **Formatos não cobertos:** projetos Leiningen e Haskell só com Cabal ainda pedem o comando de início.
+
+O código, a documentação e as instruções para contribuir estão no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).
