@@ -1,0 +1,69 @@
+---
+title: "LocalCodePilot alpha 8: haz clic en Iniciar y el proyecto arranca"
+description: "La alpha 8 inicia proyectos de más de 15 lenguajes sin pedir un comando, instala el lenguaje que falta y llega a Windows con instalador."
+pubDate: 2026-11-04
+tags: [Rust, Open Source, Developer Tools]
+locale: es
+translationKey: localcodepilot-alpha-8
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-8.png
+---
+
+Abrir un proyecto y ponerse a escribir comandos es justo lo que LocalCodePilot quiere eliminar. La `0.4.0-alpha.8` se construyó alrededor de una regla simple: **hacer clic en Iniciar tiene que iniciar el proyecto.** Si la app reconoce el lenguaje, no debería pedirte que escribas el comando.
+
+## Más lenguajes que arrancan solos
+
+Además de Node.js, PHP, Python, Java, Go, Rust, Dart y Flutter, ahora arrancan sin pedir un comando:
+
+| Proyecto | La app lo inicia con |
+| --- | --- |
+| .NET (ASP.NET, Blazor, consola, soluciones `.sln`) | `dotnet run` |
+| Ruby (Rails, Rack, Sinatra) | `bin/rails server`, `rackup` o `ruby app.rb` |
+| Deno | las tareas de `deno.json` |
+| Kotlin (Ktor, Spring Boot) | el Gradle del proyecto |
+| Elixir (Phoenix) | `mix phx.server` |
+| Swift | `swift run` |
+| Scala (sbt) | `sbt run` |
+| Clojure (`deps.edn`) | `bb clojure -M:run` |
+| Haskell (Stack) | `stack run` |
+| Zig | `zig build run` |
+
+Los proyectos sin framework también entran: un `Main.java`, una carpeta de páginas PHP o un sitio HTML arrancan de la forma más simple que permiten sus archivos.
+
+## Cuando falta el lenguaje, la app lo instala
+
+La prueba más exigente de la alpha 8 fue empezar **sin** el lenguaje en el equipo. En un proyecto Haskell, por ejemplo, el flujo fue este:
+
+1. La tarjeta mostró "Instala Haskell" y el botón **Preparar entorno**.
+2. La app instaló Stack con winget, después de la confirmación.
+3. **Instalar dependencias** descargó el compilador GHC y compiló el proyecto.
+4. **Iniciar** ejecutó el programa.
+
+El mismo flujo se validó con Clojure (a través de Babashka) y Zig.
+
+Haskell trajo un caso real: el compilador no funciona cuando la carpeta del usuario tiene un espacio, como `C:\Users\Julio Cesar`, algo común para quien tiene nombre compuesto. La app ahora lo detecta y usa una carpeta sin espacios para las herramientas de Haskell.
+
+<Callout type="info">
+Instalar un lenguaje siempre espera tu confirmación: la app muestra el plan (paquete, versión y origen) antes de ejecutar nada.
+</Callout>
+
+## Detalles que importan en el día a día
+
+- **Intentar de nuevo.** Después de un fallo, como un puerto ocupado o un programa que se cerró, la tarjeta dice el motivo y ofrece un botón para intentarlo otra vez.
+- **Un puerto realmente ocupado.** En Windows, un servidor que escucha en `0.0.0.0` podía compartir el puerto con otro programa sin que nadie lo notara. Ahora la app identifica el otro programa y te avisa.
+- **Contenedores más seguros.** Podman se validó de punta a punta. Cuando dos proyectos usan el mismo nombre de entorno Compose, **Detener los contenedores del otro proyecto** detiene solo los contenedores listados, sin borrar datos.
+- **Abrir en VS Code** ya no cae en el modo restringido.
+
+## Descargar
+
+La [release 0.4.0-alpha.8](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.8) trae, por primera vez, un **instalador para Windows** (`.exe`), junto al ZIP portátil, el DMG universal experimental para macOS y `SHA256SUMS.txt`.
+
+Los archivos de esta versión aún no tienen firma digital. Si Windows muestra "Windows protegió tu PC", haz clic en **Más información** y luego en **Ejecutar de todas formas**. La firma está en camino.
+
+## Limitaciones honestas
+
+- **Validación:** cada lenguaje se validó de punta a punta en Windows 11. El paquete para macOS sigue siendo experimental.
+- **Bases de datos:** los proyectos que necesitan base de datos, como Rails con `db:prepare` y Phoenix con Ecto, aún requieren ese paso manual.
+- **Formatos no cubiertos:** los proyectos Leiningen y los de Haskell solo con Cabal aún piden el comando de inicio.
+
+El código, la documentación y las pautas de contribución están en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).

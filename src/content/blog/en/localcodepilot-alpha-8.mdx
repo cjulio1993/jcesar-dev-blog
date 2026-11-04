@@ -1,0 +1,69 @@
+---
+title: "LocalCodePilot alpha 8: click Start and your project is up"
+description: "Alpha 8 starts projects in more than 15 languages without asking for a command, installs the missing language, and ships a Windows installer."
+pubDate: 2026-11-04
+tags: [Rust, Open Source, Developer Tools]
+locale: en
+translationKey: localcodepilot-alpha-8
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-8.png
+---
+
+Opening a project and typing commands is exactly what LocalCodePilot wants to remove. `0.4.0-alpha.8` was built around one simple rule: **clicking Start has to start the project.** If the app recognizes the language, it should not ask you to write the command.
+
+## More languages that start on their own
+
+On top of Node.js, PHP, Python, Java, Go, Rust, Dart, and Flutter, these now start without asking for a command:
+
+| Project | The app starts it with |
+| --- | --- |
+| .NET (ASP.NET, Blazor, console, `.sln` solutions) | `dotnet run` |
+| Ruby (Rails, Rack, Sinatra) | `bin/rails server`, `rackup`, or `ruby app.rb` |
+| Deno | the `deno.json` tasks |
+| Kotlin (Ktor, Spring Boot) | the project's Gradle |
+| Elixir (Phoenix) | `mix phx.server` |
+| Swift | `swift run` |
+| Scala (sbt) | `sbt run` |
+| Clojure (`deps.edn`) | `bb clojure -M:run` |
+| Haskell (Stack) | `stack run` |
+| Zig | `zig build run` |
+
+Projects without a framework are covered too: a `Main.java`, a folder of PHP pages, or an HTML site start the simplest way their files allow.
+
+## When the language is missing, the app installs it
+
+The toughest alpha 8 test was starting **without** the language on the computer. On a Haskell project, for example, the flow was:
+
+1. The card showed "Install Haskell" and the **Prepare environment** button.
+2. The app installed Stack with winget, after confirmation.
+3. **Install dependencies** downloaded the GHC compiler and built the project.
+4. **Start** ran the program.
+
+The same flow was validated with Clojure (through Babashka) and Zig.
+
+Haskell brought a real case: the compiler does not work when the user folder has a space, such as `C:\Users\Julio Cesar`, which is common for people with compound names. The app now detects this and uses a folder without spaces for the Haskell tools.
+
+<Callout type="info">
+Installing a language always waits for your confirmation: the app shows the plan (package, version, and source) before running anything.
+</Callout>
+
+## Details that matter every day
+
+- **Try again.** After a failure, such as a port in use or a program that closed, the card says why and offers a button to try once more.
+- **A port that is really taken.** On Windows, a server listening on `0.0.0.0` could share its port with another program without anyone noticing. The app now identifies the other program and warns you.
+- **Safer containers.** Podman was validated end to end. When two projects use the same Compose environment name, **Stop the other project's containers** stops only the listed containers, without deleting data.
+- **Open in VS Code** no longer lands in Restricted Mode.
+
+## Download
+
+The [0.4.0-alpha.8 release](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.8) brings, for the first time, a **Windows installer** (`.exe`), next to the portable ZIP, the experimental universal DMG for macOS, and `SHA256SUMS.txt`.
+
+The files in this version are not digitally signed yet. If Windows shows "Windows protected your PC", click **More info** and then **Run anyway**. Signing is on its way.
+
+## Honest limitations
+
+- **Validation:** each language was validated end to end on Windows 11. The macOS package remains experimental.
+- **Databases:** projects that need a database, such as Rails with `db:prepare` and Phoenix with Ecto, still need that manual step.
+- **Formats not covered:** Leiningen and Cabal-only Haskell projects still ask for the start command.
+
+Code, documentation, and contribution guidelines are in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot).

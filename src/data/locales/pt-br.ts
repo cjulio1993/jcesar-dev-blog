@@ -27,8 +27,8 @@ const ptBr: SiteCopy = {
   },
   stats: [
     { value: '4+', label: 'anos em software' },
-    { value: '50', label: 'conexões simultâneas validadas em API' },
-    { value: '3', label: 'idiomas neste site' },
+    { value: '5.000+', label: 'requisições por minuto numa API financeira em produção' },
+    { value: '15+', label: 'linguagens que o LocalCodePilot inicia' },
     { value: '1', label: 'produto open source lançado' }
   ],
   sections: {
@@ -42,7 +42,7 @@ const ptBr: SiteCopy = {
     ctaTitle: 'Tem um problema difícil que vale resolver?', ctaText: 'Tenho interesse em posições remotas de engenharia, colaborações técnicas e produtos úteis.', ctaButton: 'Vamos conversar'
   },
   projects: [
-    { ...sharedProjects.localcodepilot, description: 'Aplicativo desktop em Rust que descobre projetos locais, reconhece WordPress, diagnostica runtimes e bancos e reúne processos, logs, saúde HTTP e operações confirmadas de containers.', impact: 'Alpha 7 pública: distribuição Windows, DMG universal experimental para macOS, ajuda integrada e atualizações compatíveis com cada sistema.' },
+    { ...sharedProjects.localcodepilot, description: 'Aplicativo desktop open source em Rust: clique em Iniciar e o projeto sobe. Reconhece projetos de mais de 15 linguagens, prepara as dependências e até instala a linguagem que falta, com processos, portas, logs e containers no mesmo lugar.', impact: 'Alpha 8 pública: instalador para Windows, início automático validado de ponta a ponta no Windows 11 e preparação do ambiente pelo winget.' },
     { ...sharedProjects.banking, title: 'API de integração financeira', eyebrow: 'Produção · Integração financeira', description: 'Fluxo resiliente de entrega de arquivos para integrações bancárias, com processamento dispatcher/worker, retentativas e dead-letter queue.', impact: 'Logs estruturados, correlation IDs e idempotência tornam falhas rastreáveis e permitem recuperação segura, sem processamento duplicado.' },
     { ...sharedProjects.taskflow, description: 'Aplicação de gestão de projetos e tarefas construída como SPA completa em Laravel e Vue, com experiência refinada de quadro.', impact: 'Autenticação Sanctum, políticas de autorização e 15 testes automatizados com 47 asserções.' },
     { ...sharedProjects.platform, title: 'APIs de integração corporativa', eyebrow: 'Produção · Modernização de plataforma', description: 'Interfaces REST e SOAP que modernizam o acesso a uma plataforma corporativa sem abandonar clientes legados.', impact: 'Modernização gradual com autenticação, rate limiting, documentação de contratos e observabilidade em produção.' }
