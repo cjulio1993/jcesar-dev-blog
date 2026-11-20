@@ -1,0 +1,85 @@
+---
+title: "LocalCodePilot alpha 9: más seguro para abrir proyectos de otras personas y para actualizar"
+description: "La alpha 9 confirma el comando antes de la primera ejecución, oculta secretos en formatos conocidos en los logs guardados y verifica la firma de las próximas actualizaciones."
+pubDate: 2026-11-20
+tags: [Rust, Open Source, Developer Tools, Security]
+locale: es
+translationKey: localcodepilot-alpha-9
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-9.png
+---
+
+La alpha 8 hizo que **Iniciar** funcionara sin pedir un comando. La alpha 9 se ocupa de lo que viene con eso: un clic que ejecuta cosas en tu equipo tiene que ser un clic **seguro**, sobre todo cuando el proyecto vino del repositorio de otra persona.
+
+<figure>
+  <img src="/localcodepilot-alpha-9-confirmacao.jpg" alt="Ventana Iniciar este projeto? (¿Iniciar este proyecto?) de la Alpha 9, con la carpeta, el comando npm run dev y lo que ejecuta (node server.js) antes de la primera ejecución." loading="lazy" />
+  <figcaption>La primera vez, la aplicación muestra lo que va a ejecutar y pide confirmación. Proyecto de ejemplo.</figcaption>
+</figure>
+
+## Ves el comando antes de la primera ejecución
+
+Clonar un repositorio y hacer clic en Iniciar ejecutaba sus scripts sin mostrar nada. Ahora, la primera vez que se ejecuta un comando del proyecto, la aplicación abre **Iniciar este projeto?** (¿Iniciar este proyecto?) con:
+
+- la carpeta del proyecto;
+- el comando, como `npm run dev`;
+- lo que ese comando ejecuta de verdad (el script del `package.json` o del `composer.json`);
+- el remoto Git, en **Detalhes** (Detalles).
+
+**Cancelar** no ejecuta nada. Después de confirmar, el mismo comando vuelve a ser un clic. Si el comando o el script cambian, por ejemplo después de un `git pull`, la confirmación vuelve a aparecer.
+
+## Contraseñas y tokens fuera de los logs guardados
+
+Muchos proyectos imprimen cosas como `DATABASE_URL=postgres://usuario:contraseña@...` al iniciar. Hasta la alpha 8, esas líneas quedaban guardadas en el equipo sin plazo.
+
+En la alpha 9:
+
+- Los valores en formatos conocidos (`TOKEN=…`, `PASSWORD=…`, `Authorization: Bearer …` y la contraseña dentro de direcciones) aparecen como `••••` en los logs guardados y en **Copiar logs**.
+- Los logs guardados se borran después de 30 días, y **Limpar histórico** (Limpiar historial), en Configuración, los borra todos de una vez.
+- La copia de seguridad hecha antes de una actualización ya no incluye los logs.
+- La salida en vivo de **Ver logs** sigue completa, para que puedas investigar errores.
+
+También cerramos un caso concreto: **Validar configuração** (Validar configuración) con Podman mostraba la configuración de Compose con las contraseñas del `.env`. Ahora solo muestra si la configuración es válida y los errores.
+
+<Callout type="info">
+El enmascaramiento reconoce formatos conocidos, no todos. Antes de pegar logs en un reporte público, conviene revisar si tienen datos personales.
+</Callout>
+
+## Actualizaciones que no dejan la aplicación rota
+
+La actualización desde la aplicación ahora muestra etapas en pantalla (**Descargar › Verificar › Reiniciar**) y una barra de progreso. Por debajo, cambió bastante:
+
+- La descarga ya no tiene un límite de tiempo total. Una conexión lenta solo falla si se queda detenida.
+- Si la versión nueva no abre, la anterior y tu configuración vuelven solas.
+- La aplicación solo acepta una actualización cuya lista de checksums está **firmada por el proyecto** (Ed25519). Quien lograra cambiar los archivos de una release no podría firmar el cambio.
+
+Antes de publicar, la actualización se probó en siete escenarios: éxito, checksum incorrecto, caída a mitad de la descarga, versión nueva que se cierra al abrir, versión nueva que tarda en abrir, sin conexión y firma inválida.
+
+## Menos sustos en el día a día
+
+<figure>
+  <img src="/localcodepilot-alpha-9-interface.jpg" alt="Vista general de la Alpha 9 con un proyecto JavaScript de ejemplo en ejecución (Rodando), el sitio respondiendo en localhost y las acciones Abrir sitio, Ver logs y Detener." loading="lazy" />
+  <figcaption>Un proyecto en ejecución, con su dirección y las acciones principales. Proyecto de ejemplo.</figcaption>
+</figure>
+
+- **Un proyecto recién clonado aparece como Detenido** (Parado), con **Instalar dependências** (Instalar dependencias) o **Preparar ambiente**. Antes aparecía como "Com problema" (Con problemas) solo porque todavía faltaba el `node_modules`.
+- **Los proyectos con el mismo nombre** se distinguen por su carpeta en todas las listas.
+- **La primera apertura desde el instalador** ya no muestra carpetas de programas instalados como si fueran proyectos.
+- El ejecutable muestra la versión correcta en las Propiedades de Windows.
+
+## Descargar
+
+La [release 0.4.0-alpha.9](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.9) trae el instalador para Windows (`LocalCodePilotSetup-0.4.0-alpha.9-windows-x64.exe`), el ZIP portátil, el DMG universal experimental para macOS y el `SHA256SUMS.txt`, ahora con su firma `SHA256SUMS.txt.sig`.
+
+- **Si usas la alpha 8:** la aplicación avisa de la nueva versión. Usa **Atualizar agora** (Actualizar ahora) y, si no termina, descarga el instalador.
+- **Si usas la alpha 7:** descarga el instalador o el ZIP.
+
+Los archivos todavía no tienen firma digital de Windows. Si aparece "Windows protegió su PC", haz clic en **Más información** y después en **Ejecutar de todas formas**.
+
+## Limitaciones honestas
+
+- **Enmascaramiento de secretos:** cubre los formatos de arriba. La salida en vivo sigue mostrando todo.
+- **Actualización desde la aplicación:** sigue marcada como experimental. Desde esta versión, las próximas actualizaciones se verifican con la firma.
+- **macOS:** el paquete sigue siendo experimental.
+- **Bases de datos:** Rails con base de datos y Phoenix con Ecto todavía piden un paso manual.
+
+El código, la documentación y la guía para contribuir están en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).

@@ -1,0 +1,85 @@
+---
+title: "LocalCodePilot alpha 9: mais seguro para abrir projetos de terceiros e para atualizar"
+description: "A alpha 9 confirma o comando antes da primeira execução, mascara segredos em formatos conhecidos nos logs salvos e verifica a assinatura das próximas atualizações."
+pubDate: 2026-11-20
+tags: [Rust, Open Source, Developer Tools, Security]
+locale: pt-br
+translationKey: localcodepilot-alpha-9
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-9.png
+---
+
+A alpha 8 fez o **Iniciar** funcionar sem pedir comando. A alpha 9 cuida do que vem junto: um clique que executa coisas no seu computador precisa ser um clique **seguro**. Isso vale ainda mais quando o projeto veio de um repositório de outra pessoa.
+
+<figure>
+  <img src="/localcodepilot-alpha-9-confirmacao.jpg" alt="Janela Iniciar este projeto? da Alpha 9, mostrando a pasta, o comando npm run dev e o que ele executa (node server.js) antes da primeira execução." loading="lazy" />
+  <figcaption>Na primeira vez, o app mostra o que vai executar e pede confirmação. Projeto fictício.</figcaption>
+</figure>
+
+## Você vê o comando antes da primeira execução
+
+Clonar um repositório e clicar em Iniciar executava os scripts dele sem mostrar nada. Agora, na primeira execução de um comando do projeto, o app abre **Iniciar este projeto?** com:
+
+- a pasta do projeto;
+- o comando, como `npm run dev`;
+- o que esse comando executa de verdade (o script do `package.json` ou do `composer.json`);
+- o remoto Git, em **Detalhes**.
+
+**Cancelar** não executa nada. Depois de confirmar, o mesmo comando volta a ser um clique. Se o comando ou o script mudar, por exemplo depois de um `git pull`, a confirmação aparece de novo.
+
+## Senhas e tokens fora dos logs salvos
+
+Muitos projetos imprimem coisas como `DATABASE_URL=postgres://usuario:senha@...` ao iniciar. Até a alpha 8, essas linhas ficavam salvas no computador sem prazo.
+
+Na alpha 9:
+
+- Valores em formatos conhecidos (`TOKEN=…`, `PASSWORD=…`, `Authorization: Bearer …` e a senha dentro de endereços) aparecem como `••••` nos logs salvos e no **Copiar logs**.
+- Os logs salvos são apagados depois de 30 dias, e **Limpar histórico**, em Configurações, apaga todos de uma vez.
+- A cópia de segurança feita antes de uma atualização não leva mais os logs.
+- A saída ao vivo de **Ver logs** continua completa, para você investigar erros.
+
+Também fechamos um caso específico: **Validar configuração** com Podman mostrava a configuração do Compose já com as senhas do `.env`. Agora mostra só se a configuração é válida e os erros.
+
+<Callout type="info">
+A máscara reconhece formatos conhecidos, não todos. Antes de colar logs num relato público, vale conferir se há dados pessoais.
+</Callout>
+
+## Atualização que não deixa o app quebrado
+
+A atualização pelo app ganhou etapas na tela (**Baixar › Verificar › Reiniciar**) e uma barra de progresso. Por baixo, mudou bastante:
+
+- O download não tem mais limite de tempo total. Uma conexão lenta só falha se ficar parada.
+- Se a versão nova não abrir, a anterior e as suas configurações voltam sozinhas.
+- O app só aceita uma atualização cuja lista de checksums foi **assinada pelo projeto** (Ed25519). Quem conseguisse trocar os arquivos de uma release não conseguiria assinar a troca.
+
+Antes da publicação, a atualização foi testada em sete cenários: sucesso, checksum errado, queda no meio do download, versão nova que fecha ao abrir, versão nova que demora a abrir, sem conexão e assinatura inválida.
+
+## Menos sustos no dia a dia
+
+<figure>
+  <img src="/localcodepilot-alpha-9-interface.jpg" alt="Visão geral da Alpha 9 com um projeto JavaScript fictício Rodando, site respondendo em localhost e as ações Abrir site, Ver logs e Parar." loading="lazy" />
+  <figcaption>Um projeto rodando, com o endereço e as ações principais. Projeto fictício.</figcaption>
+</figure>
+
+- **Projeto recém-clonado aparece como Parado**, com **Instalar dependências** ou **Preparar ambiente**. Antes ele aparecia como "Com problema" só porque ainda faltava o `node_modules`.
+- **Projetos com o mesmo nome** se distinguem pela pasta em todas as listas.
+- **A primeira abertura pelo instalador** não mostra mais pastas de programas instalados como se fossem projetos.
+- O executável mostra a versão certa nas Propriedades do Windows.
+
+## Baixar
+
+A [release 0.4.0-alpha.9](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.9) tem o instalador para Windows (`LocalCodePilotSetup-0.4.0-alpha.9-windows-x64.exe`), o ZIP portátil, o DMG universal experimental para macOS e o `SHA256SUMS.txt`, agora com a assinatura `SHA256SUMS.txt.sig`.
+
+- **Quem usa a alpha 8:** o app avisa a nova versão. Use **Atualizar agora** e, se não concluir, baixe o instalador.
+- **Quem usa a alpha 7:** baixe o instalador ou o ZIP.
+
+Os arquivos ainda não têm assinatura digital do Windows. Se aparecer "O Windows protegeu o computador", clique em **Mais informações** e depois em **Executar assim mesmo**.
+
+## Limitações honestas
+
+- **Máscara de segredos:** cobre os formatos listados acima. A saída ao vivo continua mostrando tudo.
+- **Atualização pelo app:** continua marcada como experimental. A partir desta versão, as próximas atualizações são conferidas pela assinatura.
+- **macOS:** o pacote continua experimental.
+- **Bancos de dados:** Rails com banco e Phoenix com Ecto ainda pedem um passo manual.
+
+O código, a documentação e as instruções para contribuir estão no [repositório do LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).

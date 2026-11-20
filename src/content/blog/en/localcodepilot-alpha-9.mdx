@@ -1,0 +1,85 @@
+---
+title: "LocalCodePilot alpha 9: safer to open other people's projects and to update"
+description: "Alpha 9 confirms the command before the first run, masks secrets in known formats in saved logs, and verifies the signature of future updates."
+pubDate: 2026-11-20
+tags: [Rust, Open Source, Developer Tools, Security]
+locale: en
+translationKey: localcodepilot-alpha-9
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-9.png
+---
+
+Alpha 8 made **Start** work without asking for a command. Alpha 9 takes care of what comes with it: a click that runs things on your computer has to be a **safe** click, especially when the project came from someone else's repository.
+
+<figure>
+  <img src="/localcodepilot-alpha-9-confirmacao.jpg" alt="Alpha 9 Start this project? window (Iniciar este projeto?), showing the folder, the npm run dev command and what it runs (node server.js) before the first run." loading="lazy" />
+  <figcaption>The first time, the app shows what it will run and asks for confirmation. Sample project.</figcaption>
+</figure>
+
+## You see the command before the first run
+
+Cloning a repository and clicking Start used to run its scripts without showing anything. Now, the first time a project command runs, the app opens **Iniciar este projeto?** (Start this project?) with:
+
+- the project folder;
+- the command, such as `npm run dev`;
+- what that command actually runs (the `package.json` or `composer.json` script);
+- the Git remote, under **Detalhes** (Details).
+
+**Cancelar** (Cancel) runs nothing. After you confirm, the same command is one click again. If the command or the script changes, for example after a `git pull`, the confirmation comes back.
+
+## Passwords and tokens out of saved logs
+
+Many projects print things like `DATABASE_URL=postgres://user:password@...` when they start. Up to alpha 8, those lines stayed saved on the computer with no time limit.
+
+In alpha 9:
+
+- Values in known formats (`TOKEN=…`, `PASSWORD=…`, `Authorization: Bearer …` and the password inside addresses) show as `••••` in saved logs and in **Copiar logs** (Copy logs).
+- Saved logs are deleted after 30 days, and **Limpar histórico** (Clear history), in Settings, deletes them all at once.
+- The backup taken before an update no longer includes the logs.
+- The live output in **Ver logs** (View logs) stays complete, so you can still investigate errors.
+
+We also closed one specific case: **Validar configuração** (Validate configuration) with Podman showed the Compose configuration with the `.env` passwords filled in. Now it shows only whether the configuration is valid, and the errors.
+
+<Callout type="info">
+The masking recognizes known formats, not all of them. Before pasting logs into a public report, check them for personal data.
+</Callout>
+
+## Updates that don't leave the app broken
+
+Updating from inside the app now shows steps on screen (**Download › Verify › Restart**) and a progress bar. Underneath, a lot changed:
+
+- The download no longer has a total time limit. A slow connection only fails if it stalls.
+- If the new version does not open, the previous one and your settings come back on their own.
+- The app only accepts an update whose checksum list is **signed by the project** (Ed25519). Someone able to replace a release's files would not be able to sign the replacement.
+
+Before publishing, updating was tested in seven scenarios: success, wrong checksum, connection drop mid-download, a new version that closes on start, a new version that is slow to start, no connection, and an invalid signature.
+
+## Fewer surprises day to day
+
+<figure>
+  <img src="/localcodepilot-alpha-9-interface.jpg" alt="Alpha 9 overview with a sample JavaScript project Running (Rodando), the site answering on localhost, and the Open site, View logs and Stop actions." loading="lazy" />
+  <figcaption>A running project with its address and main actions. Sample project.</figcaption>
+</figure>
+
+- **A freshly cloned project shows as Stopped** (Parado), with **Install dependencies** or **Prepare environment**. Before, it showed as "Com problema" (Has a problem) just because `node_modules` was still missing.
+- **Projects with the same name** are told apart by their folder in every list.
+- **The first launch from the installer** no longer lists installed programs' folders as projects.
+- The executable shows the right version in Windows Properties.
+
+## Download
+
+The [0.4.0-alpha.9 release](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.9) has the Windows installer (`LocalCodePilotSetup-0.4.0-alpha.9-windows-x64.exe`), the portable ZIP, the experimental universal macOS DMG, and `SHA256SUMS.txt`, now with its `SHA256SUMS.txt.sig` signature.
+
+- **Using alpha 8:** the app announces the new version. Use **Atualizar agora** (Update now) and, if it does not complete, download the installer.
+- **Using alpha 7:** download the installer or the ZIP.
+
+The files are not yet signed for Windows. If you see "Windows protected your PC", click **More info** and then **Run anyway**.
+
+## Honest limitations
+
+- **Secret masking:** covers the formats listed above. The live output still shows everything.
+- **In-app updates:** still marked as experimental. From this version on, later updates are checked against the signature.
+- **macOS:** the package is still experimental.
+- **Databases:** Rails with a database and Phoenix with Ecto still need a manual step.
+
+The code, documentation and contribution guide are in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot).
