@@ -1,0 +1,98 @@
+---
+title: "LocalCodePilot Alpha 10: en Windows, Iniciar puede preparar la base de datos"
+description: "En Windows, la alpha 10 puede preparar PostgreSQL, MySQL o MariaDB para el proyecto y solo muestra la base de datos como conectada después de un inicio de sesión real con los datos del propio proyecto."
+pubDate: 2026-11-21
+tags: [Rust, Open Source, Developer Tools, Databases]
+locale: es
+translationKey: localcodepilot-alpha-10
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-10.png
+---
+
+La alpha 8 hizo que **Iniciar** funcionara sin pedir un comando, y la alpha 9 hizo ese clic más seguro. Faltaba la parte que más traba a quien está empezando: la base de datos. En la alpha 10, **en Windows, Iniciar puede preparar la base de datos del proyecto**. En macOS y Linux, la aplicación prueba la conexión con la base de datos, pero no prepara el servidor.
+
+<Callout type="info">
+La Alpha 10 es la última versión alpha planificada de LocalCodePilot.
+</Callout>
+
+## "Banco de dados conectado." ahora significa conectado
+
+Hasta ahora, un puerto abierto bastaba para que la tarjeta dijera que la base de datos estaba bien. Pero un puerto abierto no garantiza que el proyecto pueda iniciar sesión.
+
+Ahora la aplicación prueba el inicio de sesión con la base de datos, el usuario y la contraseña del propio proyecto (del `.env` o del archivo de configuración del proyecto PHP). La tarjeta solo muestra **Banco de dados conectado.** (Base de datos conectada.) después de esa prueba. Una base de datos detenida, un acceso rechazado y una base de datos que no existe aparecen con el motivo por escrito.
+
+## Iniciar prepara PostgreSQL, MySQL y MariaDB (Windows)
+
+La primera vez, la aplicación pregunta **Preparar banco de dados para este projeto?** (¿Preparar una base de datos para este proyecto?) y muestra la descarga, el espacio necesario, y la base de datos y el usuario que se van a crear. Después:
+
+- el paquete del servidor es una versión fijada y verificada por SHA-256;
+- el servidor solo escucha en este equipo (`127.0.0.1`);
+- la contraseña de administración queda en el Administrador de credenciales de Windows;
+- el proyecto solo arranca después de que la base de datos acepta los datos de acceso del propio proyecto.
+
+Al cerrar la aplicación, intenta detener el servidor y avisa en la próxima apertura si no lo logró. Los datos se conservan.
+
+## Correcciones con confirmación
+
+Cuando la base de datos impide el inicio, el proyecto queda en **Com problema** (Con problemas) y la tarjeta ofrece la salida segura, siempre con confirmación:
+
+- **Usar outra porta** (Usar otro puerto): cambia solo `DB_PORT` y guarda una copia del `.env`;
+- **Corrigir conexão** (Corregir conexión);
+- **Criar banco novo** (Crear base de datos nueva): los datos anteriores quedan guardados.
+
+Después de cada corrección, el inicio de sesión se prueba de nuevo.
+
+## Los servidores que ya tienes quedan intactos
+
+Si ya hay una base de datos respondiendo en el puerto del proyecto, la aplicación solo prueba el inicio de sesión: no se crea, cambia ni detiene nada. Las bases de datos de Compose siguen en la página Containers.
+
+## SQL Server
+
+El inicio de sesión del proyecto también se prueba en SQL Server. En Windows, con Docker o Podman listos, **Iniciar** puede crear un contenedor de SQL Server 2022 Developer, después de que marques que leíste y aceptas los términos de licencia de Microsoft. La aplicación nunca los acepta por ti.
+
+Para ser claros sobre lo que se validó: la preparación de SQL Server en contenedor se probó en CI en Linux con Docker. Todavía no se probó de punta a punta en Windows (Docker Desktop o Podman), ni la conexión con un SQL Server instalado directamente en Windows.
+
+## Actualización con el instalador oficial
+
+A partir de la alpha 10, una copia instalada usa el instalador oficial en las próximas actualizaciones, y la lista de programas de Windows acompaña la versión instalada. Una ventana pequeña, **Atualizando o LocalCodePilot** (Actualizando LocalCodePilot), acompaña la instalación y el reinicio.
+
+La actualización también es más clara: la etapa **Instalar**, una pregunta antes de cerrar los proyectos que están en Rodando (En ejecución), errores en lenguaje sencillo con la próxima acción y "Qué hay de nuevo" en el aviso.
+
+En los proyectos, las tarjetas tienen la misma altura, y el puerto de otro programa ya no se asigna a un proyecto cuando Windows reutiliza el número de un proceso.
+
+## Un bug detectado antes de publicar
+
+Antes de crear la tag, el build de release pasó por una prueba de punta a punta. Detectó un problema: la preparación de MySQL y MariaDB se quedaba en "Preparando o banco de dados…" (Preparando la base de datos…). La causa: después de añadir el soporte para SQL Server, rustls pasó a compilarse con dos backends de criptografía (`ring` y `aws-lc-rs`) y quedó sin uno por defecto. La conexión TLS del inicio de sesión de administración de MySQL fallaba, la tarea terminaba sin enviar resultado y la tarjeta esperaba para siempre.
+
+La corrección, que entró antes de la tag, define el backend por defecto antes de cada conexión MySQL/MariaDB y pone un límite de tiempo al inicio de sesión de administración. Y si una tarea de la base de datos se interrumpe, el proyecto ahora queda en **Com problema**, con la causa en **Detalhes** (Detalles), en vez de quedarse esperando.
+
+## Descargar
+
+La [release 0.4.0-alpha.10](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.10) tiene el instalador para Windows (`LocalCodePilotSetup-0.4.0-alpha.10-windows-x64.exe`), el ZIP portátil, el DMG universal experimental para macOS y el `SHA256SUMS.txt`, con la firma `SHA256SUMS.txt.sig`.
+
+- **Si usas la alpha 8 o la alpha 9:** la aplicación avisa la nueva versión; usa **Atualizar agora** (Actualizar ahora). En la alpha 9 instalada con el instalador, la actualización reemplaza solo el ejecutable, y la lista de programas de Windows sigue mostrando la alpha 9. Para corregir la lista, ejecuta el instalador de la alpha 10 una vez.
+- **Si usas la alpha 7:** descarga el instalador o el ZIP.
+
+**Antes de abrir, verifica el archivo.** Los archivos de esta versión no tienen firma de código. Compara el SHA-256 del archivo descargado con el publicado en `SHA256SUMS.txt`:
+
+```powershell
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\NOMBRE-DEL-ARCHIVO'
+```
+
+Abre el archivo solo si coinciden. Si aparece "Windows protegió su PC", haz clic en **Más información** y después en **Ejecutar de todas formas**.
+
+## Limitaciones honestas
+
+- **Preparación de la base de datos:** solo en Windows. En macOS y Linux, la aplicación prueba la conexión, pero no prepara el servidor.
+- **SQL Server:** se prepara solo en contenedor, y la imagen funciona solo en equipos x64. Todavía no se probó de punta a punta en Windows.
+- **Tablas:** la aplicación no crea tablas. Las migraciones como `db:prepare` (Rails) siguen siendo cosa tuya.
+- **Configuración:** los proyectos configurados solo con `DATABASE_URL` o con archivos de Spring, Django y .NET todavía no se reconocen.
+- **Actualización desde la aplicación:** sigue siendo experimental.
+- **macOS:** el DMG sigue siendo experimental y no se probó en un Mac real en esta versión.
+- **Contenedores:** la aplicación no instala Docker ni Podman.
+
+## Próximos pasos
+
+Con la alpha 10 termina la fase alpha planificada. El plan ahora es probar la aplicación con personas que usan proyectos reales y, después, publicar una versión beta para Windows. Todavía no hay fecha.
+
+El código, la documentación y las instrucciones para contribuir están en el [repositorio de LocalCodePilot](https://github.com/cjulio1993/LocalCodePilot).

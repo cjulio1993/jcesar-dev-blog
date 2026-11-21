@@ -1,0 +1,98 @@
+---
+title: "LocalCodePilot Alpha 10: on Windows, Start can prepare the database"
+description: "On Windows, alpha 10 can prepare PostgreSQL, MySQL or MariaDB for the project, and it only shows the database as connected after a real login with the project's own credentials."
+pubDate: 2026-11-21
+tags: [Rust, Open Source, Developer Tools, Databases]
+locale: en
+translationKey: localcodepilot-alpha-10
+series: localcodepilot
+heroImage: /og-localcodepilot-alpha-10.png
+---
+
+Alpha 8 made **Start** work without asking for a command, and alpha 9 made that click safer. One part still stopped people who are just getting started: the database. In alpha 10, **on Windows, Start can prepare the project's database**. On macOS and Linux, the app tests the database connection but does not prepare the server.
+
+<Callout type="info">
+Alpha 10 is the last planned alpha version of LocalCodePilot.
+</Callout>
+
+## "Banco de dados conectado." now means connected
+
+Until now, an open port was enough for the card to say the database was fine. But an open port does not guarantee the project can log in.
+
+Now the app tests the login with the project's own database, user and password (from `.env` or from the PHP project's configuration file). The card only shows **Banco de dados conectado.** (Database connected.) after that test. A stopped database, a refused login and a database that does not exist show up with the reason in writing.
+
+## Start prepares PostgreSQL, MySQL and MariaDB (Windows)
+
+The first time, the app asks **Preparar banco de dados para este projeto?** (Prepare a database for this project?) and shows the download, the disk space needed, and the database and user that will be created. Then:
+
+- the server package is a pinned version, verified by SHA-256;
+- the server only listens on this computer (`127.0.0.1`);
+- the admin password is kept in Windows Credential Manager;
+- the project only starts after the database accepts the project's own credentials.
+
+When you close the app, it tries to shut the server down and tells you on the next launch if it couldn't. The data stays.
+
+## Fixes with confirmation
+
+When the database blocks the start, the project shows **Com problema** (Has a problem) and the card offers the safe way out, always with confirmation:
+
+- **Usar outra porta** (Use another port): changes only `DB_PORT` and keeps a copy of `.env`;
+- **Corrigir conexão** (Fix connection);
+- **Criar banco novo** (Create a new database): the previous data is kept.
+
+After each fix, the login is tested again.
+
+## Servers you already have are left untouched
+
+If a database is already answering on the project's port, the app only tests the login: nothing is created, changed or stopped. Compose databases stay on the Containers page.
+
+## SQL Server
+
+The project's login is tested on SQL Server too. On Windows, with Docker or Podman ready, **Start** can create a SQL Server 2022 Developer container, after you tick that you have read and accept Microsoft's license terms. The app never accepts them for you.
+
+To be clear about what was validated: SQL Server preparation through a container was tested in CI on Linux with Docker. It has not yet been tested end to end on Windows (Docker Desktop or Podman), nor has the connection to a SQL Server installed directly on Windows.
+
+## Updates through the official installer
+
+Starting with alpha 10, an installed copy uses the official installer for future updates, and the Windows program list follows the installed version. A small window, **Atualizando o LocalCodePilot** (Updating LocalCodePilot), follows the installation and the restart.
+
+Updates are also clearer: an **Instalar** (Install) step, a question before stopping projects that are Rodando (Running), plain-language errors with the next action, and "What's new" in the notice.
+
+In the project list, cards have the same height, and another program's port is no longer assigned to a project when Windows reuses a process number.
+
+## A bug caught before publishing
+
+Before the tag was created, the release build went through an end-to-end test. It caught a problem: MySQL and MariaDB preparation got stuck on "Preparando o banco de dados…" (Preparing the database…). The cause: after SQL Server support was added, rustls was compiled with two crypto backends (`ring` and `aws-lc-rs`) and was left without a default. The TLS connection for the MySQL admin login failed, the task ended without sending a result, and the card waited forever.
+
+The fix, which landed before the tag, sets the default backend before every MySQL/MariaDB connection and puts a time limit on the admin login. And if a database task is interrupted, the project now shows **Com problema**, with the cause in **Detalhes** (Details), instead of waiting.
+
+## Download
+
+The [0.4.0-alpha.10 release](https://github.com/cjulio1993/LocalCodePilot/releases/tag/v0.4.0-alpha.10) has the Windows installer (`LocalCodePilotSetup-0.4.0-alpha.10-windows-x64.exe`), the portable ZIP, the experimental universal DMG for macOS, and `SHA256SUMS.txt`, with its signature `SHA256SUMS.txt.sig`.
+
+- **On alpha 8 or alpha 9:** the app announces the new version; use **Atualizar agora** (Update now). On alpha 9 installed through the installer, the update replaces only the executable, and the Windows program list keeps showing alpha 9. To fix the list, run the alpha 10 installer once.
+- **On alpha 7:** download the installer or the ZIP.
+
+**Check the file before opening it.** The files in this version are not code-signed. Compare the SHA-256 of the downloaded file with the one published in `SHA256SUMS.txt`:
+
+```powershell
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\FILE-NAME'
+```
+
+Only open the file if they match. If "Windows protected your PC" appears, click **More info** and then **Run anyway**.
+
+## Honest limitations
+
+- **Database preparation:** Windows only. On macOS and Linux, the app tests the connection but does not prepare the server.
+- **SQL Server:** prepared only in a container, and the image only works on x64 computers. Not yet tested end to end on Windows.
+- **Tables:** the app does not create tables. Migrations such as `db:prepare` (Rails) are still up to you.
+- **Configuration:** projects configured only through `DATABASE_URL` or through Spring, Django and .NET files are not recognized yet.
+- **In-app updates:** still experimental.
+- **macOS:** the DMG is still experimental and was not tested on a real Mac in this version.
+- **Containers:** the app does not install Docker or Podman.
+
+## Next steps
+
+With alpha 10, the planned alpha phase ends. The plan now is to test the app with people using real projects and then publish a beta version for Windows. There is no date yet.
+
+The code, documentation and contribution guidelines are in the [LocalCodePilot repository](https://github.com/cjulio1993/LocalCodePilot).
